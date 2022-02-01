@@ -42,6 +42,7 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 	this.computeAttributes();
 	this.execute();
 	this.ready = false;
+	this.started=false;
 	this.currentplayer = false;
 	this.pNode = this.document.createElement("div");
 	this.audiodomNode = this.document.createElement("div");
@@ -65,10 +66,11 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 		events: {
 		  'onReady':  function (event) {
 			 // alert("ready");
+			 self.debug.log ("ytready");
 						self.ready = true;
 						if (self.src) { //bj maybe add && selF.READY
 							var parms = {};
-							if (self.start) parms.startSeconds  =parseInt(self.start);
+							if (self.start) { parms.startSeconds  =parseInt(self.start);self.debug.log("startsec "+parms.startSeconds);} 
 							if (self.end) parms.endSeconds  =parseInt(self.end);
 							if (self.src) parms.videoId  =self.src ;
 							event.target.loadVideoById(parms);
@@ -76,15 +78,25 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 						}
 				},
 		  'onStateChange': function (event) {
+			  self.debug.log ("ytstate"+event.data)
 				if (event.data == YT.PlayerState.ENDED) {
-					if (self.onEnd){
+					
+					//self.started=false;
+					if (self.onEnd){self.debug.log ("yt send stop");
 						self.dispatchEvent({
 						type: self.onEnd
 						});	
 					}	
-				}	
+				} 
+			},
+			'onError':function (event) {
+			  self.debug.log ("yterror"+event.data);
+			  if (self.onEnd){self.debug.log ("yt send stop");
+						self.dispatchEvent({
+						type: self.onEnd
+						});	
+					}
 			}
-		  
 		}
 	});
 
@@ -102,7 +114,7 @@ YTrawWidget.prototype.onPlayerReady = function (event) {
 	self.ready = true;
 	if (self.src) { //bj maybe add && selg
 		var parms = {};
-		if (self.start) parms.startSeconds  =parseInt(self.start);
+		if (self.start) {parms.startSeconds  =parseInt(self.start);this.debug.log("startsec "+parms.startSeconds);}
 		if (self.end) parms.endSeconds  =parseInt(self.end);
 		if (self.src) parms.videoId  =self.src ;
 		event.target.loadVideoById(parms);
@@ -125,7 +137,7 @@ YTrawWidget.prototype.ourmedia = function(event) {
 		}
 		return false;
 }
-YTrawWidget.prototype.invokeAction = function(triggeringWidget,event) {
+YTrawWidget.prototype.doAction = function(triggeringWidget,event) {
 	if (event.type == "preStart" && this.currentplayer && !this.ourmedia(event)) { 
 
 		this.hide();
@@ -141,7 +153,7 @@ YTrawWidget.prototype.invokeAction = function(triggeringWidget,event) {
 
 	}
 
-	return true; // Action was invoked
+	return ; // Action was invoked
 };
 /*
 Compute the internal state of the widget
@@ -154,7 +166,9 @@ YTrawWidget.prototype.execute = function() {
     this.startTime = this.parseTreeNode.startTime;
 	this.height = this.parseTreeNode.height;
 	this.width = this.parseTreeNode.width;
-	this.onStart = this.parseTreeNode.onStart
+	this.onStart = this.parseTreeNode.onStart;
+	this.doLog = this.parseTreeNode.doLog;
+	this.debug = this.doLog ? console :{log:function(x){}};
     // Construct the child widgets
 	this.makeChildWidgets();
 };
@@ -176,8 +190,8 @@ YTrawWidget.prototype.handleStartEvent = function(event) {
 		if ((tid = this.wiki.getTiddler(additionalFields.tiddler)) && (tid.hasField("_canonical_uri"))) {
 			if (tid.fields["yt-id"]) self.src = tid.fields["yt-id"];
 			else self.src = tid.fields._canonical_uri.match(self.extractid)[2];
-			if (tid.fields["yt-start"]) self.start = tid.fields["yt-start"];
-			if (tid.fields["yt-end"]) self.end = tid.fields["yt-end"];
+			if (tid.fields["yt-start"]) {self.start = tid.fields["yt-start"];this.debug.log ("has starttime");} else self.start = null;
+			if (tid.fields["yt-end"]) self.end = tid.fields["yt-end"];else self.end = null;
 			self.equalize = tid.fields.equalize || 1.0;
 		}	
 	}
@@ -185,17 +199,22 @@ YTrawWidget.prototype.handleStartEvent = function(event) {
 
 	if (self.ready) {
 		if (this.src) { //bj maybe add && selg
-			//alert("go");
-			player.loadVideoById({videoId: self.src});
+			this.debug.log ("yt start ready");
+		var parms = {};
+		if (self.start) parms.startSeconds= parseInt(self.start);
+		if (self.end) parms.endSeconds  =parseInt(self.end);
+		if (self.src) parms.videoId  =self.src ;
+		player.loadVideoById(parms);
 			player.playVideo();
-			if (self.onStart){
-				self.dispatchEvent({
-				type: self.onStart
-				});	
-			}
+			
+		} 
+	} else this.debug.log ("yt start not ready");
+	if (self.onStart){this.debug.log ("yt send stop");
+			self.dispatchEvent({
+			type: self.onStart
+			});	
 		}
-	}
-
+	
 	} catch(e) {};
 	
 
@@ -316,7 +335,7 @@ YTWidget.prototype.execute = function() {
 		this.makeChildWidgets([{type: "ytrawplayer", onEnd: this.getAttribute("onEnd"), deltas: this.getAttribute("deltas",10), 
 			startTime: this.getAttribute("startTime",0.0), width:this.getAttribute("width",640), 
 			height:this.getAttribute("height",320), children: this.parseTreeNode.children,
-			onStart:this.getAttribute("onStart")
+			onStart:this.getAttribute("onStart"),doLog:this.getAttribute("doLog")
 		}]);
 	}
 };
@@ -335,9 +354,20 @@ YTWidget.prototype.refresh = function(changedTiddlers) {
 		return this.refreshChildren(changedTiddlers);		
 	}
 };
-YTWidget.prototype.invokeAction = function(triggeringWidget,event) {
-	this.invokeActions(this,event);
-	return true; // Action was invoked
+YTWidget.prototype.doAction = function(triggeringWidget,event) {
+	this.doActions(this,event);
+	return; // Action was invoked
+};
+
+YTWidget.prototype.doActions = function(triggeringWidget,event) {
+	for(var t=0; t<this.children.length; t++) {
+		var child = this.children[t],
+			childIsActionWidget = !!child.doAction;
+		if(childIsActionWidget) {
+			 child.doAction(triggeringWidget,event);
+		}
+	}
+	return;
 };
 exports.ytplayer = YTWidget;
 

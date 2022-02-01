@@ -121,12 +121,12 @@ MPlayListWidget.prototype.doMove = function(loc) {
 		var tid,i;
 		for (i = 0; i < this.list.length; i++) {
 			if ((loc == this.list[i]) && (tid = this.getTiddler(this.list[i]))) {
-				this.invokeActions(this,{type:"preStart",tiddler: this.list[i]});
+				this.doActions(this,{type:"preStart",tiddler: this.list[i]});
 				if (this.earlyset === "true")  {
 					this.settid(i);
 				}
 				this.caught = null;
-				this.invokeActions(this,{type:"start",tiddler: this.list[i]});
+				this.doActions(this,{type:"start",tiddler: this.list[i]});
 				if (this.caught) {
 					this.settid(i);
 					break;
@@ -158,17 +158,17 @@ MPlayListWidget.prototype.doStart = function() {
 			return;
 		}
 		if (this.n == this.list.length -1) { alert (this.list.length);
-			//self.invokeActions(event);//BJ fix!
+			//self.doActions(event);//BJ fix!
 			return;
 		};
 		for (i = this.n + 1; i < this.list.length; i++) {
 			if ((tid = this.getTiddler(this.list[i]))) {
-				this.invokeActions(this,{type:"preStart",tiddler: this.list[i]});
+				this.doActions(this,{type:"preStart",tiddler: this.list[i]});
 				this.caught = null;
 				if (this.earlyset === "true")  {
 					this.settid(i);
 				}
-				this.invokeActions(this,{type:"start",tiddler: this.list[i]});
+				this.doActions(this,{type:"start",tiddler: this.list[i]});
 				if (this.caught) { console.log("dostart caught "+i)
 					this.settid(i);
 					break;
@@ -202,12 +202,12 @@ MPlayListWidget.prototype.doNext = function() {
 		}
 		for (i = this.n + 1; i < this.list.length; i++) {
 			if ((tid = this.getTiddler(this.list[i]))) {
-				this.invokeActions(this,{type:"preStart",tiddler: this.list[i]});
+				this.doActions(this,{type:"preStart",tiddler: this.list[i]});
 				if (this.earlyset === "true")  {
 					this.settid(i);
 				}
 				this.caught = null;
-				this.invokeActions(this,{type:"start",tiddler: this.list[i]});
+				this.doActions(this,{type:"start",tiddler: this.list[i]});
 				if (this.caught) {
 					this.settid(i);
 					break;
@@ -230,12 +230,12 @@ MPlayListWidget.prototype.doPrev = function() {
 		
 		for (i = this.n - 1 ; i >=0; i--) {
 			if ((tid = this.getTiddler(this.list[i]))) {
-				this.invokeActions(this,{type:"preStart",tiddler: this.list[i]});
+				this.doActions(this,{type:"preStart",tiddler: this.list[i]});
 				if (this.earlyset === "true")  {
 					this.settid(i);
 				}
 				this.caught = null;
-				this.invokeActions(this,{type:"start",tiddler: this.list[i]});
+				this.doActions(this,{type:"start",tiddler: this.list[i]});
 				if (this.caught) {
 					this.settid(i);
 					break;
@@ -256,12 +256,12 @@ MPlayListWidget.prototype.doAgain = function() {
 		
 		for (i = this.n; i >=0; i--) {
 			if ((tid = this.getTiddler(this.list[i]))) {
-				this.invokeActions(this,{type:"preStart",tiddler: this.list[i]});
+				this.doActions(this,{type:"preStart",tiddler: this.list[i]});
                 if (this.earlyset === "true")  {
 					this.settid(i);
 				}
 				this.caught = null;
-				this.invokeActions(this,{type:"start",tiddler: this.list[i]});
+				this.doActions(this,{type:"start",tiddler: this.list[i]});
 				if (this.caught) {
 					this.settid(i);
 				}
@@ -313,6 +313,20 @@ MPlayListWidget.prototype.handlePrevEvent = function(event) {
 	
 	
 }
+
+MPlayListWidget.prototype.doActions = function(triggeringWidget,event) {
+	var handled = false;
+	// For each child widget
+	for(var t=0; t<this.children.length; t++) {
+		var child = this.children[t],
+			childIsActionWidget = !!child.doAction;
+		if(childIsActionWidget) {
+			 child.doAction(triggeringWidget,event);
+		}
+	}
+	return;
+};
+
 MPlayListWidget.prototype.allowActionPropagation = function() {
 	return false;
 };

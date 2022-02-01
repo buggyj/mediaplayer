@@ -1,0 +1,148 @@
+title: $:/bj/templates/playList
+type: text/vnd.tiddlywiki
+
+\define showtid(x)
+<$transclude tiddler={{$x$}} mode="block"/>
+\end
+\define extra()
+<div style="overflow:scroll; height:50vh" >
+
+|<$transclude tiddler="$(current)$/letra" mode="inline"/>|<$transclude tiddler="$(current)$/lyrics" mode="inline"/>|
+</div>
+\end
+
+\define make()
+<$set name="current" value ={{$(synctid)$}}>
+
+<<extra>>
+
+</$set> 
+\end
+
+\define img()
+<$reveal type="nomatch" state="$:/state/ge/image" text="show">
+
+<$button set="$:/state/ge/image" setTo="show">Show me</$button>
+
+</$reveal>
+
+<$reveal type="match" state="$:/state/ge/image" text="show">
+
+<$button set="$:/state/ge/image" setTo="hide">Hide me</$button>
+
+<$image source="$(currentTiddler)$.png" height="300px"/>
+</$reveal>
+\end
+ 
+ 
+<$vars synctid=<<qualify "$:/temp/">>>
+<$msequence filter="[tag<currentTiddler>]" syntid=<<synctid>>  mode="dynamic" onEnd="tm-ply-next" autoStart="yes">
+<$staticplayer onEnd="tm-mply-next" onStart="tm-mply-caught" >
+
+<$set name="currentTiddler" value =<<synctid>>>
+<$macrocall $name="showtid" x=<<currentTiddler>>/>
+</$set>
+</$staticplayer>
+<$ytplayer onEnd="tm-mply-next" onStart="tm-mply-caught"  deltas="5.0" >
+<$button><$action-sendmessage $message="tm-msdwn" />
+\
+</$button>
+<$button><$action-sendmessage $message="tm-msup" />
+/
+</$button>
+<$button><$action-sendmessage $message="tm-mvdwn" />
+-
+</$button>
+<$button><$action-sendmessage $message="tm-mvup" />
++
+</$button>
+<$button><$action-sendmessage $message="tm-mrw" />
+<-
+</$button>
+<$button><$action-sendmessage $message="tm-mff" />
+->
+</$button>
+<$button><$action-sendmessage $message="tm-mply-stick" />
+O
+</$button>
+<$button><$action-sendmessage $message="tm-mply-unstick" />
+Φ
+</$button>
+</$ytplayer>
+<$vplayer onEnd="tm-mply-next" onStart="tm-mply-caught"  deltas="5.0" >
+<$button>
+<$action-sendmessage $message="tm-msdwn" />
+\
+</$button>
+<$button><$action-sendmessage $message="tm-msup" />
+/
+</$button>
+<$button><$action-sendmessage $message="tm-mvdwn" />
+-
+</$button>
+<$button><$action-sendmessage $message="tm-mvup" />
++
+</$button>
+<$button><$action-sendmessage $message="tm-mrw" />
+<-
+</$button>
+<$button><$action-sendmessage $message="tm-mff" />
+->
+</$button>
+<$button><$action-sendmessage $message="tm-mply-stick" />
+O</$button>
+<$button><$action-sendmessage $message="tm-mply-unstick" />
+Φ
+</$button>
+</$vplayer>
+<$mplayer onEnd="tm-mply-next" onStart="tm-mply-caught" mode="dynamic" deltas="5">
+<$button><$action-sendmessage $message="tm-msdwn" />
+\
+</$button>
+<$button><$action-sendmessage $message="tm-msup" />
+/
+</$button>
+<$button><$action-sendmessage $message="tm-mvdwn" />
+-
+</$button>
+<$button><$action-sendmessage $message="tm-mvup" />
++
+</$button>
+<$button><$action-sendmessage $message="tm-mrw" />
+<-
+</$button>
+<$button><$action-sendmessage $message="tm-mff" />
+->
+</$button>
+<$button><$action-sendmessage $message="tm-mply-stick" />
+O</$button>
+<$button>
+<$action-sendmessage $message="tm-mply-unstick" />
+Φ
+</$button>
+{{makesay}}
+</$mplayer>
+<$button><$action-sendmessage $message="tm-mply-prev" />
+^
+</$button>
+<$button><$action-sendmessage $message="tm-mply-forcenext" />
+v
+</$button>
+<$linkcatcher message="tm-mply-move">
+<$set name=currentTag value=<<currentTiddler>>>
+<h2>Control individual playlists using drag and drop</h2>
+<$ondrop tagAction="addtag" targeTtag=<<currentTiddler>>>
+<$taglist class="btn btn-primary" targeTtag=<<currentTiddler>> template="$:/bj/templates/isPlaying" emptyMessage="drop here to add to playlist"></$taglist>
+</$ondrop>
+</$set>
+</$linkcatcher>
+<<make>>
+
+</$msequence>
+
+
+
+
+
+
+

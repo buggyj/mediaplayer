@@ -54,7 +54,7 @@ SPlayerWidget.prototype.ourmedia = function(event) {
 		}
 		return false;
 }
-SPlayerWidget.prototype.invokeAction = function(triggeringWidget,event) {
+SPlayerWidget.prototype.doAction = function(triggeringWidget,event) {
 	if (event.type == "preStart" && this.currentplayer && !this.ourmedia(event)) { 
 		this.domNodes[0].setAttribute("hidden","true");
 		this.currentplayer = false;

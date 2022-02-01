@@ -92,7 +92,7 @@ MPlayerWidget.prototype.ourmedia = function(event) {
 		}
 		return false;
 }
-MPlayerWidget.prototype.invokeAction = function(triggeringWidget,event) {
+MPlayerWidget.prototype.doAction = function(triggeringWidget,event) {
 	if (event.type == "preStart" && this.currentplayer && !this.ourmedia(event)) { 
 		this.audiodomNode.setAttribute("hidden","true");
 		this.cNode.setAttribute("hidden","true");

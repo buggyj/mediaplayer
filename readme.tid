@@ -1,0 +1,15 @@
+title: $:/plugins/bj/mplayers/readme
+type: text/vnd.tiddlywiki
+
+!!The Media Player
+The Media Player consists of a media sequencer (msequence widget) and media players (currently  mp3 (mplayer widget), youtube (ytplayer widget) and item) . 
+
+The msequence widget is responsible for sequencing a list of media tracks by actioning the media player widgets, and responding to their status messages. The list is either given as a named tag or as a filter, -
+`<$msequence targetTag={{$:/temp/list}}>` or` <$msequence filter="....>` where filter is any filter expression.
+
+The media players, when used with the msequence widget, must return status and next messages i.e. `<$ytplayer onEnd="tm-mply-next" onStart="tm-mply-caught">`
+
+The msequence widget also broadcasts which tiddler is currently playing by writing to a  'sync' tiddler, defined as a parameter of the widget, eg `<$msequence syntid="$:/temp/priv/playing">`
+
+
+

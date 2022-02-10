@@ -102,11 +102,13 @@ SPlayerWidget.prototype.refresh = function(changedTiddlers) {
 SPlayerWidget.prototype.handleStartEvent = function(event) {
 	var player = this.audiodomNode;
 	var self = this,additionalFields,track,tid;
-
+    var duration = this.timeOut
 	{
 		additionalFields = event;
 		if ((tid = this.wiki.getTiddler(additionalFields.tiddler))) {
-
+			if (tid.hasField("st-duration")) {
+				duration= parseInt(tid.fields["st-duration"])*1000;
+			}
 		}	
 	}
 	try {
@@ -121,7 +123,7 @@ SPlayerWidget.prototype.handleStartEvent = function(event) {
 					});	
 				}
 			return false; // dont propegate
-		},this.timeOut);
+		},duration);
 		
 		if (this.onStart){
 			this.dispatchEvent({

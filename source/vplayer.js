@@ -29,6 +29,8 @@ MPlayerWidget.prototype.tag = "video";
 
 MPlayerWidget.prototype.media = "video/mp4";
 
+MPlayerWidget.prototype.playerclass = "bjvideo";
+
 exports.vplayer = MPlayerWidget;
 
 })();

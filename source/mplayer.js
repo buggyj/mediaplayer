@@ -54,6 +54,8 @@ MPlayerWidget.prototype = new Widget();
 MPlayerWidget.prototype.tag = "audio";
 
 MPlayerWidget.prototype.media = "audio/mp3";
+
+MPlayerWidget.prototype.playerclass = "bjaudio";
 /*
 Render this widget into the DOM
 */
@@ -72,7 +74,7 @@ MPlayerWidget.prototype.render = function(parent,nextSibling) {
 			});	
 		}		
 	});
-	
+	this.audiodomNode.className = this.playerclass;
 	this.pNode.appendChild(this.audiodomNode);	
 	this.cNode = this.document.createElement(this.el);
 	this.pNode.appendChild(this.cNode);
@@ -131,6 +133,7 @@ MPlayerWidget.prototype.execute = function() {
     this.important = this.getAttribute("important");
     this.wait = this.getAttribute("wait");
     this.el = this.getAttribute("el","div");
+    this.playerclass = this.getAttribute("class",this.playerclass);
     
     // Construct the child widgets
 	this.makeChildWidgets();

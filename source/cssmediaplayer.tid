@@ -1,0 +1,10 @@
+tags: $:/tags/Stylesheet
+title: $:/bj/css/mediaplayer
+type: text/vnd.tiddlywiki
+
+\rules only filteredtranscludeinline transcludeinline macrodef macrocallinline html
+
+ .bjvideo {
+height: 100%;
+width: 100%;
+}

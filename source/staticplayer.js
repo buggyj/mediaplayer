@@ -117,7 +117,7 @@ SPlayerWidget.prototype.handleStartEvent = function(event) {
 		}
 		this.timerId = setTimeout(	function (){	// Check for an empty list
 			self.timerId = null;
-					if (self.onEnd){
+					if (self.onEnd && !!self.domNodes[0]){
 					self.dispatchEvent({
 					type: self.onEnd
 					});	

@@ -1,0 +1,86 @@
+created: 20220214131751236
+modified: 20220217123736480
+tags: 
+title: $:/bj/templates/playListYTNotations
+type: text/vnd.tiddlywiki
+
+\define currentAsTag() [[$(currentTiddler)$]]
+\define sliceOfCurrent()  $(currentTiddler)$/slice
+\define MakeTemplate(tmpl:$:/bj/templates/isPlayingYTN) {{||$tmpl$}}
+\define MakeEditTemplate(tmpl:$:/bj/templates/isEditYTN) {{||$tmpl$}}
+
+
+<$vars synctid=<<qualify "$:/temp/">>>
+<$msequence filter="[tag<currentTiddler>]" syntid=<<synctid>>  mode="dynamic"  onEnd="tm-ply-next" autoStart="yes">
+
+
+<$ytplayer onStart="tm-mply-caught"    onEnd="tm-mply-next" deltas="5.0" doLog="true">
+
+
+<$reveal type="match" state="$:/state/SampleReveal2" text="show">
+<$button set="$:/state/SampleReveal2" setTo="hide">X</$button>
+   <$button label="set yt-start">yt-start = slider
+      <$action-sendmessage $message="tm-mpause"/>
+      <$dupvar readvar="playertime" writevar="starttime" refresh="yes" >
+         <$action-setfield $tiddler={{{[<synctid>get[text]]}}} yt-start=<<starttime>>/>
+      </$dupvar>
+   </$button>
+   <$button label="set yt-end">yt-end = slider
+      <$action-sendmessage $message="tm-mpause"/>
+      <$dupvar readvar="playertime" writevar="endtime" refresh="yes" >
+         <$action-setfield $tiddler={{{[<synctid>get[text]]}}} yt-end=<<endtime>>/>
+      </$dupvar>
+   </$button>
+<$edit-text tiddler={{{[<synctid>get[text]]}}} field="summary"/>
+
+</$reveal>
+</$ytplayer>
+<$reveal type="nomatch" state="$:/state/SampleReveal2" text="show">
+<$button set="$:/state/SampleReveal2" setTo="show">🖊️</$button>
+</$reveal><$button><$action-sendmessage $message="tm-mply-prev" />
+⏫
+</$button>
+<$button><$action-sendmessage $message="tm-mply-forcenext" />
+⏬
+</$button>
+<$button><$action-sendmessage $message="tm-mply-stick" />
+🔁
+</$button>
+<$button><$action-sendmessage $message="tm-mply-unstick" />
+⬇️
+</$button>
+
+
+<$reveal type="match" state="$:/state/SampleReveal2" text="show">
+<$vars  tag=<<currentAsTag>>>
+<h2>Control playlists order using drag and drop</h2>
+<$button>
+➕
+<$action-createtiddler $basetitle=<<sliceOfCurrent>> tags=<<tag>> _canonical_uri={{!!location}} yt-start="00:00:00"  yt-end="00:00:00" summary="" type="video/x-youtube">
+</$action-createtiddler>
+</$button>
+</$vars>
+<$linkcatcher message="tm-mply-move">
+<$vars template={{{[all[current]get[edittemplate]]}}} currentTag=<<currentTiddler>>>
+<$taglist class="btn btn-primary" targeTtag=<<currentTiddler>>  emptyMessage="start again" noadd="true"><$macrocall $name ="MakeEditTemplate" tmpl=<<template>>/></$taglist>
+</$vars>
+</$linkcatcher>
+</$reveal>
+
+<$reveal type="nomatch" state="$:/state/SampleReveal2" text="show">
+<$linkcatcher message="tm-mply-move">
+<$vars template={{{[all[current]get[template]]}}} currentTag=<<currentTiddler>>>
+<$list filter="[tag<currentTiddler>]">
+<$macrocall $name ="MakeTemplate" tmpl=<<template>>/>
+</$list>
+</$vars>
+</$linkcatcher>
+</$reveal>
+</$msequence>
+
+
+
+
+
+
+

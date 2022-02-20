@@ -5,9 +5,11 @@ type: text/vnd.tiddlywiki
 <$transclude tiddler="$(current)$/text" mode="block"/>
 \end
 
+\define MakeTemplate(tmpl:{{||$:/bj/templates/playList}}) $tmpl$
+
 \define content(syntid)
 <$vars currentTiddler={{$syntid$}}>
-{{||$:/bj/templates/playList}}
+<$macrocall $name ="MakeTemplate" tmpl={{{[all[current]get[text]]}}}/>
 </$vars>
 \end
 !!Control list of Playlists using drag and drop

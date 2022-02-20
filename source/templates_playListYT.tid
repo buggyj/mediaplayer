@@ -1,0 +1,37 @@
+created: 20220214111735925
+modified: 20220217123736470
+tags: 
+title: $:/bj/templates/playListYT
+type: text/vnd.tiddlywiki
+
+<$vars synctid=<<qualify "$:/temp/">>>
+<$msequence filter="[tag<currentTiddler>]" syntid=<<synctid>>  mode="dynamic"  onEnd="tm-ply-next" autoStart="yes">
+<$ytplayer onEnd="tm-mply-next" onStart="tm-mply-caught"  deltas="5.0"/>
+<$button><$action-sendmessage $message="tm-mply-prev" />
+^
+</$button>
+<$button><$action-sendmessage $message="tm-mply-forcenext" />
+v
+</$button>
+<$button><$action-sendmessage $message="tm-mply-stick" />
+O
+</$button>
+<$button><$action-sendmessage $message="tm-mply-unstick" />
+Φ
+</$button>
+<$linkcatcher message="tm-mply-move">
+<$set name=currentTag value=<<currentTiddler>>>
+<h2>Control individual playlists using drag and drop</h2>
+<$ondrop tagAction="addtag" targeTtag=<<currentTiddler>>>
+<$taglist class="btn btn-primary" targeTtag=<<currentTiddler>> template="$:/bj/templates/isPlaying" emptyMessage="drop here to add to playlist"></$taglist>
+</$ondrop>
+</$set>
+</$linkcatcher>
+</$msequence>
+
+
+
+
+
+
+

@@ -1,0 +1,13 @@
+created: 20220219095536608
+modified: 20220219154435506
+tags: 
+title: $:/bj/templates/isPlayingBasic
+type: text/vnd.tiddlywiki
+
+
+<$reveal state=<<currentlyPlaying>> text={{!!title}} type="nomatch">
+<$link><span class="tc-taglistplain"><$view field="title"/></span></$link>
+</$reveal>
+<$reveal state=<<currentlyPlaying>> text={{!!title}} type="match">
+<$link><span class="tc-taglist"><$view field="title"/></span></$link></$reveal>
+<br>

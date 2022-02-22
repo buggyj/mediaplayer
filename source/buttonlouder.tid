@@ -1,0 +1,9 @@
+created: 20220222083912738
+modified: 20220222084003785
+tags: 
+title: $:/bj/buttonlouder
+type: text/vnd.tiddlywiki
+
+<$button><$action-sendmessage $message="tm-mvup" />
++
+</$button>

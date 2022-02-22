@@ -1,0 +1,9 @@
+created: 20220222080746654
+modified: 20220222080814358
+tags: 
+title: $:/bj/buttonrewind
+type: text/vnd.tiddlywiki
+
+<$button><$action-sendmessage $message="tm-mrw" />
+⏪
+</$button>

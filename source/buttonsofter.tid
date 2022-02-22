@@ -1,0 +1,9 @@
+created: 20220222083946894
+modified: 20220222084045473
+tags: 
+title: $:/bj/buttonsofter
+type: text/vnd.tiddlywiki
+
+<$button><$action-sendmessage $message="tm-mvdwn" />
+-
+</$button>

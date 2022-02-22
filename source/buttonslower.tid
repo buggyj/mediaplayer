@@ -1,0 +1,9 @@
+created: 20220222083033279
+modified: 20220222083043606
+tags: 
+title: $:/bj/buttonslower
+type: text/vnd.tiddlywiki
+
+<$button><$action-sendmessage $message="tm-msdwn" />
+⇝
+</$button>

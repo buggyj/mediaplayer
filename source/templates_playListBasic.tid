@@ -1,5 +1,5 @@
 created: 20220219090612409
-modified: 20220219185607358
+modified: 20220221175652676
 tags: 
 title: $:/bj/templates/playListBasic
 type: text/vnd.tiddlywiki
@@ -16,12 +16,8 @@ type: text/vnd.tiddlywiki
       <$transclude tiddler={{{[<currentlyPlaying>get[text]]}}} mode="block"/>
    </$staticplayer>
 
-   <$button><$action-sendmessage $message="tm-mply-prev" />
-^
-   </$button>
-   <$button><$action-sendmessage $message="tm-mply-forcenext" />
-v
-   </$button>
+{{$:/bj/buttonup}}
+{{$:/bj/buttondown}}
 
    <$linkcatcher message="tm-mply-move">
 

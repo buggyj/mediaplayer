@@ -1,5 +1,5 @@
 created: 20220214131751236
-modified: 20220217123736480
+modified: 20220221180659561
 tags: 
 title: $:/bj/templates/playListYTNotations
 type: text/vnd.tiddlywiki
@@ -37,20 +37,10 @@ type: text/vnd.tiddlywiki
 </$ytplayer>
 <$reveal type="nomatch" state="$:/state/SampleReveal2" text="show">
 <$button set="$:/state/SampleReveal2" setTo="show">🖊️</$button>
-</$reveal><$button><$action-sendmessage $message="tm-mply-prev" />
-⏫
-</$button>
-<$button><$action-sendmessage $message="tm-mply-forcenext" />
-⏬
-</$button>
-<$button><$action-sendmessage $message="tm-mply-stick" />
-🔁
-</$button>
-<$button><$action-sendmessage $message="tm-mply-unstick" />
-⬇️
-</$button>
-
-
+</$reveal>
+{{$:/bj/buttonup}}
+{{$:/bj/buttondown}}
+{{$:/bj/buttonloop}}
 <$reveal type="match" state="$:/state/SampleReveal2" text="show">
 <$vars  tag=<<currentAsTag>>>
 <h2>Control playlists order using drag and drop</h2>

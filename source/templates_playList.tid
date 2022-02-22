@@ -1,3 +1,5 @@
+created: 20220221175545090
+modified: 20220222090532327
 title: $:/bj/templates/playList
 type: text/vnd.tiddlywiki
 
@@ -44,90 +46,32 @@ type: text/vnd.tiddlywiki
 </$set>
 </$staticplayer>
 <$ytplayer onEnd="tm-mply-next" onStart="tm-mply-caught"  deltas="5.0" >
-<$button><$action-sendmessage $message="tm-msdwn" />
-\
-</$button>
-<$button><$action-sendmessage $message="tm-msup" />
-/
-</$button>
-<$button><$action-sendmessage $message="tm-mvdwn" />
--
-</$button>
-<$button><$action-sendmessage $message="tm-mvup" />
-+
-</$button>
-<$button><$action-sendmessage $message="tm-mrw" />
-<-
-</$button>
-<$button><$action-sendmessage $message="tm-mff" />
-->
-</$button>
-<$button><$action-sendmessage $message="tm-mply-stick" />
-O
-</$button>
-<$button><$action-sendmessage $message="tm-mply-unstick" />
-Φ
-</$button>
+{{$:/bj/buttonslower}}
+{{$:/bj/buttonfaster}}
+{{$:/bj/buttonsofter}}
+{{$:/bj/buttonlouder}}
+{{$:/bj/buttonrewind}}
+{{$:/bj/buttonfastforward}}
 </$ytplayer>
 <$vplayer onEnd="tm-mply-next" onStart="tm-mply-caught"  deltas="5.0" >
-<$button>
-<$action-sendmessage $message="tm-msdwn" />
-\
-</$button>
-<$button><$action-sendmessage $message="tm-msup" />
-/
-</$button>
-<$button><$action-sendmessage $message="tm-mvdwn" />
--
-</$button>
-<$button><$action-sendmessage $message="tm-mvup" />
-+
-</$button>
-<$button><$action-sendmessage $message="tm-mrw" />
-<-
-</$button>
-<$button><$action-sendmessage $message="tm-mff" />
-->
-</$button>
-<$button><$action-sendmessage $message="tm-mply-stick" />
-O</$button>
-<$button><$action-sendmessage $message="tm-mply-unstick" />
-Φ
-</$button>
+{{$:/bj/buttonslower}}
+{{$:/bj/buttonfaster}}
+{{$:/bj/buttonsofter}}
+{{$:/bj/buttonlouder}}
+{{$:/bj/buttonrewind}}
+{{$:/bj/buttonfastforward}}
 </$vplayer>
 <$mplayer onEnd="tm-mply-next" onStart="tm-mply-caught" mode="dynamic" deltas="5">
-<$button><$action-sendmessage $message="tm-msdwn" />
-\
-</$button>
-<$button><$action-sendmessage $message="tm-msup" />
-/
-</$button>
-<$button><$action-sendmessage $message="tm-mvdwn" />
--
-</$button>
-<$button><$action-sendmessage $message="tm-mvup" />
-+
-</$button>
-<$button><$action-sendmessage $message="tm-mrw" />
-<-
-</$button>
-<$button><$action-sendmessage $message="tm-mff" />
-->
-</$button>
-<$button><$action-sendmessage $message="tm-mply-stick" />
-O</$button>
-<$button>
-<$action-sendmessage $message="tm-mply-unstick" />
-Φ
-</$button>
-{{makesay}}
+{{$:/bj/buttonslower}}
+{{$:/bj/buttonfaster}}
+{{$:/bj/buttonsofter}}
+{{$:/bj/buttonlouder}}
+{{$:/bj/buttonrewind}}
+{{$:/bj/buttonfastforward}}
 </$mplayer>
-<$button><$action-sendmessage $message="tm-mply-prev" />
-^
-</$button>
-<$button><$action-sendmessage $message="tm-mply-forcenext" />
-v
-</$button>
+{{$:/bj/buttonup}}
+{{$:/bj/buttondown}}
+{{$:/bj/buttonloop}}
 <$linkcatcher message="tm-mply-move">
 <$set name=currentTag value=<<currentTiddler>>>
 <h2>Control individual playlists using drag and drop</h2>
@@ -136,7 +80,7 @@ v
 </$ondrop>
 </$set>
 </$linkcatcher>
-<<make>>
+<!--- <<make>> --->
 
 </$msequence>
 

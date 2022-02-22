@@ -1,0 +1,9 @@
+created: 20220222083008057
+modified: 20220222083029823
+tags: 
+title: $:/bj/buttonfaster
+type: text/vnd.tiddlywiki
+
+<$button><$action-sendmessage $message="tm-msup" />
+⇉
+</$button>

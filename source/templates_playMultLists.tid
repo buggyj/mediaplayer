@@ -1,3 +1,5 @@
+created: 20220221180133983
+modified: 20220222075634817
 title: $:/bj/templates/playMultLists
 type: text/vnd.tiddlywiki
 
@@ -9,25 +11,27 @@ type: text/vnd.tiddlywiki
 
 \define content(syntid)
 <$vars currentTiddler={{$syntid$}}>
+<$list filter="[<currentTiddler>tag<currentTag>get[title]]" variable="notused" >
 <$macrocall $name ="MakeTemplate" tmpl={{{[all[current]get[text]]}}}/>
+</$list>
 </$vars>
 \end
 !!Control list of Playlists using drag and drop
-<$vars synctid=<<qualify "$:/temp/">>>
+<$vars synctid=<<qualify "$:/temp/">> currentTag=<<currentTiddler>>>
 <$playlist filter="[tag<currentTiddler>]" syntid=<<synctid>>  mode="dynamic">
 <$ondrop targeTtag=<<currentTiddler>> tagAction="addtag" >
 <$button> 
 <$action-sendmessage $message="tm-ply-prev" />
-<<
+⏮️
 </$button>
 <$button>
 <$action-sendmessage $message="tm-ply-next" />
->>
+⏭️
 </$button>
 <$linkcatcher message="tm-ply-move">
-<$set name=currentTag value=<<currentTiddler>>>
+
 <$taglist class="btn btn-primary" targeTtag=<<currentTiddler>> template="$:/bj/templates/currentList" emptyMessage="drop playlist here"></$taglist>
-</$set>
+
 </$linkcatcher>
 </$ondrop>
 

@@ -1,0 +1,9 @@
+created: 20220221174351467
+modified: 20220221174543357
+tags: 
+title: $:/bj/buttondown
+type: text/vnd.tiddlywiki
+
+<$button><$action-sendmessage $message="tm-mply-forcenext" />
+⏬
+</$button>

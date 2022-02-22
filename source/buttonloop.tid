@@ -1,0 +1,12 @@
+created: 20220221180427332
+modified: 20220221180556508
+tags: 
+title: $:/bj/buttonloop
+type: text/vnd.tiddlywiki
+
+<$toggle name="loopcntrl" primeValue="$:/bj/buttonIconLoop" altValue="$:/bj/buttonIconStraight">
+<$button>
+   <$transclude tiddler=<<loopcntrl>>/>
+   <$action-sendmessage $message="bjm-toggle" />
+</$button>
+</$toggle>

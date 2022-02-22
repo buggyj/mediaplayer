@@ -281,8 +281,9 @@ MPlayListWidget.prototype.handleReStart = function(event) {
 	return false; // dont propegate
 }
 MPlayListWidget.prototype.handleNextEvent = function(event) {
-		// Check for an empty list
-	if (this.sticky) this.doAgain();
+
+    if (this.mode == "dynamic") this.updatelist();
+	if (this.sticky && this.n==(this.list.length-1)) this.doAgain();
 	else this.doNext();
 	return false; // dont propegate
 }

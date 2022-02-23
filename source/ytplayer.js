@@ -162,23 +162,25 @@ Compute the internal state of the widget
 */
 YTrawWidget.prototype.execute = function() {
 	// Get our parameters
-	this.volume = 1.0;
-	this.onEnd = this.parseTreeNode.onEnd;
-    this.deltas = this.parseTreeNode.deltas;
-    this.startTime = this.parseTreeNode.startTime;
-	this.height = this.parseTreeNode.height;
-	this.width = this.parseTreeNode.width;
-	this.onStart = this.parseTreeNode.onStart;
-	this.doLog = this.parseTreeNode.doLog;
+	this.volume = 1.0; 
+	this.onEnd = this.getAttribute("onEnd");
+    this.deltas = this.getAttribute("deltas",10);
+    this.startTime = this.getAttribute("startTime",0.0);
+	this.height = this.getAttribute("height",320);
+	this.width = this.getAttribute("width",640);
+	this.onStart = this.getAttribute("onStart");
+	this.doLog = this.getAttribute("doLog");
 	this.debug = this.doLog ? console :{log:function(x){}};
     // Construct the child widgets
-	this.makeChildWidgets();
+	this.makeChildWidgets();console.log("startytraw "+ this.onStart);
 };
 
 /*
 Selectively refreshes the widget if needed. Returns true if the widget or any of its children needed re-rendering
 */
 YTrawWidget.prototype.refresh = function(changedTiddlers) {
+var changedAttributes = this.computeAttributes();
+if(changedAttributes.onEnd ) this.onEnd = this.getAttribute("onEnd");
 	return this.refreshChildren(changedTiddlers);
 };
 YTrawWidget.prototype.extractid = /(youtu\.be\/|[?&]v=)([^&]+)/;
@@ -282,16 +284,18 @@ YTrawWidget.prototype.handleVolDwnEvent = function(event) {
 	return false;//always consume event
 };
 YTrawWidget.prototype.handleFFEvent = function(event) {
-	var player = this.audiodomNode;
+	var player = this.player;
 	try {
-	player.currentTime += this.deltas;
+		var currentTime = player.getCurrentTime();
+		player.seekTo(currentTime +  (1.0*this.deltas), true);
 	} catch(e) {};
 	return false;//always consume event
 };
 YTrawWidget.prototype.handleRWEvent = function(event) {
-	var player = this.audiodomNode;
+	var player = this.player;
 	try {
-	player.currentTime -= this.deltas;
+		var currentTime = player.getCurrentTime();
+		player.seekTo(currentTime - this.deltas, true);
 	} catch(e) {};
 	return false;//always consume event
 };
@@ -336,10 +340,10 @@ YTWidget.prototype.execute = function() {
 
 	if (this.ready) {
 		// Make the child widgets
-		this.makeChildWidgets([{type: "ytrawplayer", onEnd: this.getAttribute("onEnd"), deltas: this.getAttribute("deltas",10), 
-			startTime: this.getAttribute("startTime",0.0), width:this.getAttribute("width",640), 
-			height:this.getAttribute("height",320), children: this.parseTreeNode.children,
-			onStart:this.getAttribute("onStart"),doLog:this.getAttribute("doLog")
+		this.makeChildWidgets([{
+			type: "ytrawplayer",
+			attributes: this.parseTreeNode.attributes,
+			children: this.parseTreeNode.children
 		}]);
 	}
 };
@@ -351,7 +355,7 @@ Selectively refreshes the widget if needed. Returns true if the widget or any of
 YTWidget.prototype.refresh = function(changedTiddlers) {
 	var changedAttributes = this.computeAttributes();
 	// Refresh if an attribute has changed, or the type associated with the target tiddler has changed
-	if(changedAttributes.onEnd || changedAttributes.startTime || changedAttributes.deltas || (changedTiddlers["$:/temp/ytplayerready"])) {
+	if(changedTiddlers["$:/temp/ytplayerready"]) {
 		this.refreshSelf();
 		return true;
 	} else {

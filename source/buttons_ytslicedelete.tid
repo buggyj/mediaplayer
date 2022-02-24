@@ -1,0 +1,17 @@
+caption: {{$:/core/images/delete-button}} {{$:/language/Buttons/Delete/Caption}}
+created: 20220223213259181
+description: {{$:/language/Buttons/Delete/Hint}}
+modified: 20220223213735624
+tags: 
+title: $:/bj/buttons/ytslicedelete
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+\define extra() $(currentTiddler)$/extra
+<$button actions=<<cancel-delete-tiddler-actions "delete">> tooltip={{$:/language/Buttons/Delete/Hint}} aria-label={{$:/language/Buttons/Delete/Caption}} class=<<tv-config-toolbar-class>>>
+<$action-deletetiddler $tiddler=<<extra>>/>
+<$list filter="[<tv-config-toolbar-icons>match[yes]]">
+{{$:/core/images/delete-button}}
+</$list>
+
+</$button>

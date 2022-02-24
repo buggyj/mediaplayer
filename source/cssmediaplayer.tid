@@ -1,3 +1,5 @@
+created: 20220224091611183
+modified: 20220224091624886
 tags: $:/tags/Stylesheet
 title: $:/bj/css/mediaplayer
 type: text/vnd.tiddlywiki
@@ -5,6 +7,12 @@ type: text/vnd.tiddlywiki
 \rules only filteredtranscludeinline transcludeinline macrodef macrocallinline html
 
  .bjvideo {
+height: 100%;
+width: 100%;
+}
+
+
+ .bjeditbox {
 height: 100%;
 width: 100%;
 }

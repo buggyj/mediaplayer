@@ -183,17 +183,30 @@ var changedAttributes = this.computeAttributes();
 if(changedAttributes.onEnd ) this.onEnd = this.getAttribute("onEnd");
 	return this.refreshChildren(changedTiddlers);
 };
-YTrawWidget.prototype.extractid = /(youtu\.be\/|[?&]v=)([^&]+)/;
-
+try {
+		YTrawWidget.prototype.config = $tw.wiki.getTiddlerData("$:/bj/modules/widgets/ytplayer/config.json");
+		YTrawWidget.prototype.extractid = new RegExp(YTrawWidget.prototype.config.extractidregx);
+	} catch(e) {
+		console.log("invalid config format");
+		YTrawWidget.prototype.config = {};
+		YTrawWidget.prototype.extractid = /(youtu\.be\/|[?&]v=)([^&]+)/;
+	}
 YTrawWidget.prototype.handleStartEvent = function(event) {
 	var player = this.player;
 	var self = this,additionalFields,tid;
 
 	{
 		additionalFields = event;
-		if ((tid = this.wiki.getTiddler(additionalFields.tiddler)) && (tid.hasField("_canonical_uri"))) {
+		if ((tid = this.wiki.getTiddler(additionalFields.tiddler)) && !!(tid.fields["_canonical_uri"])) {
 			if (tid.fields["yt-id"]) self.src = tid.fields["yt-id"];
-			else self.src = tid.fields._canonical_uri.match(self.extractid)[2];
+			else {
+				var uri =  tid.fields["_canonical_uri"]||"";
+				var exuri = uri.match(self.extractid);
+				if (!!exuri && exuri.length == 3) {
+					self.src = exuri[2];
+				}
+				else self.src ="";
+			}
 			if (tid.fields["yt-start"]) {self.start = tid.fields["yt-start"];this.debug.log ("has starttime");} else self.start = null;
 			if (tid.fields["yt-end"]) self.end = tid.fields["yt-end"];else self.end = null;
 			self.equalize = tid.fields.equalize || 1.0;

@@ -9,7 +9,6 @@
 	{
 		"file": "readme.tid",
 		"fields": {
-			"type": "text/plain",
 			"title": "$:/plugins/bj/mediaplayer/readme"
 		}
 	}],

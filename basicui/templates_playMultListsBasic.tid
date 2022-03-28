@@ -1,24 +1,20 @@
 title: $:/bj/templates/playMultListsBasic
 type: text/vnd.tiddlywiki
 
+
 <$vars currentPlayList=<<qualify "$:/temp/">> currentTag=<<currentTiddler>>>
 <$playlist filter="[tag<currentTiddler>]" syntid=<<currentPlayList>>  mode="dynamic">
-   <$button> 
-   <$action-sendmessage $message="tm-ply-prev" />
-<<
-   </$button>
-   <$button>
-      <$action-sendmessage $message="tm-ply-next" />
->>
-   </$button>
+
+{{$:/bj/buttonprevlist}}
+{{$:/bj/buttonnextlist}}
+
 <$linkcatcher message="tm-ply-move">
 
-<$vars currentTag=<<currentTiddler>>>
 <$list filter="[tag<currentTiddler>]" template="$:/bj/templates/currentListBasic" emptyMessage="Tag a tiddler with this tiddler to add to the list of playlists"/>
-</$vars>
+
 </$linkcatcher>
 
-   <!--- current playlist, use a list to set current tiddler and transclude--->
+<!--- current playlist, use a list to set current tiddler and transclude--->
 
 <$vars currentTiddler={{{[<currentPlayList>get[text]]}}}>
    <$list filter="[<currentTiddler>tag<currentTag>get[title]]" variable="notused" >

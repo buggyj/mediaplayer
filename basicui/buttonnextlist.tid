@@ -1,0 +1,7 @@
+title: $:/bj/buttonnextlist
+type: text/vnd.tiddlywiki
+
+<$button>
+<$action-sendmessage $message="tm-ply-next" />
+⏭️
+</$button>

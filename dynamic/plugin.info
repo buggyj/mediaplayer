@@ -1,0 +1,10 @@
+{
+	"title": "$:/plugins/bj/mediaplayerDynamicTmplates",
+	"description": "media player",
+	"author": "JeffreyWilkinson",
+	"version": "2.0.6",
+	"list": "license readme",
+	"core-version": ">=5.2.0",
+	"source": "https://github.com/buggyj/mediaplayer",
+	"plugin-type": "plugin"
+}

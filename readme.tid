@@ -3,7 +3,7 @@
 A list of tiddlers is played in sequence. 
 
 !!sequencer
-The mseq widget control the order of the sequence and calls upon the players widget to play each tid in the sequence. 
+The mseq widget control the order of the sequence and calls upon the player widgets to play each tid in the sequence. 
 
 
 !!!mseq responds to these messages
@@ -26,8 +26,6 @@ The msequence widget also broadcasts which tiddler is currently playing by writi
 
 The media players, when used with the msequence widget, return status and next messages i.e. `<$ytplayer onEnd="tm-mply-next" onStart="tm-mply-caught">`
 
-The msequence widget also broadcasts which tiddler is currently playing by writing to a  'sync' tiddler, defined as a parameter of the widget, eg `<$msequence syntid="aTiddler">`
-
 !!Players
 
 media players (currently  audio/mp3 (mplayer widget), video/mp4 (vplayer widget), video/x-youtube (ytplayer widget), staticplayer for tiddlytext tids, and the playlist widget for sequencing titles of a list) . 
@@ -47,7 +45,7 @@ Audio and Video players respond to these messages:
 
 !!Multiple paylists
 
-It is possible to have a playlist of playlists using the playlist widget. The playlist accepts a filter as a parameter (default is `[tag<currentTiddler>]`). 
+It is possible to have a playlist of playlists using the playlist widget. The playlist widget accepts a filter as a parameter (default is `[tag<currentTiddler>]`). 
 The tiddler at the current list position is indicated by the contents of a 'sync' tiddler, defined as a parameter of the widget, `<$playlist ..... syntid="
 SomeTiddler">`
 

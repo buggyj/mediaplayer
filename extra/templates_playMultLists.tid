@@ -1,42 +1,33 @@
 title: $:/bj/templates/playMultLists
 type: text/vnd.tiddlywiki
 
-\define extra()
-<$transclude tiddler="$(current)$/text" mode="block"/>
-\end
-
-\define MakeTemplate(tmpl:{{||$:/bj/templates/playList}}) $tmpl$
-
-\define content(syntid)
-<$vars currentTiddler={{$syntid$}}>
-<$list filter="[<currentTiddler>tag<currentTag>get[title]]" variable="notused" >
-<$macrocall $name ="MakeTemplate" tmpl={{{[all[current]get[text]]}}}/>
-</$list>
-</$vars>
-\end
 !!Control list of Playlists using drag and drop
-<$vars synctid=<<qualify "$:/temp/">> currentTag=<<currentTiddler>>>
-<$playlist filter="[tag<currentTiddler>]" syntid=<<synctid>>  mode="dynamic">
+<$vars currentPlayList=<<qualify "$:/temp/">> currentTag=<<currentTiddler>>>
+<$playlist filter="[tag<currentTiddler>]" syntid=<<currentPlayList>>  mode="dynamic">
 <$ondrop targeTtag=<<currentTiddler>> tagAction="addtag" >
-<$button> 
-<$action-sendmessage $message="tm-ply-prev" />
-⏮️
-</$button>
-<$button>
-<$action-sendmessage $message="tm-ply-next" />
-⏭️
-</$button>
+{{$:/bj/buttonprevlist}}
+{{$:/bj/buttonnextlist}}
+
 <$linkcatcher message="tm-ply-move">
 
-<$taglist class="btn btn-primary" targeTtag=<<currentTiddler>> template="$:/bj/templates/currentList" emptyMessage="drop playlist here"></$taglist>
+<$taglist targeTtag=<<currentTiddler>> template="$:/bj/templates/currentList" emptyMessage="drop playlist here" class="btn btn-primary"></$taglist>
 
 </$linkcatcher>
 </$ondrop>
+<!--- current playlist, use a list to set current tiddler and transclude--->
 
-<$macrocall $name=content syntid=<<synctid>>/>
-
+<$vars currentTiddler={{{[<currentPlayList>get[text]]}}}>
+   <$list filter="[<currentTiddler>tag<currentTag>get[title]]" variable="notused" >
+   <$transclude tiddler={{{[all[current]get[text]] +[trim[]removeprefix[{{||]removesuffix[}}]]}}}>
+      <$transclude tiddler={{{[all[current]get[text]] +[trim[]]}}}>
+         <$transclude tiddler={{{[title[$:/bj/default/templates/playList]get[text]] +[trim[]]}}}>
+         no template found in $:/bj/default/templates/playList
+         </$transclude>
+      </$transclude> 
+   </$transclude>
+   </$list>
+</$vars>
 </$playlist>
-
 </$vars>
 
 

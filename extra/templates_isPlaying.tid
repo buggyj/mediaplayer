@@ -1,8 +1,8 @@
 title: $:/bj/templates/isPlaying
 type: text/vnd.tiddlywiki
 
-<$reveal state=<<synctid>> text={{!!title}} type="nomatch"><$fieldmangler><$button  param= <<currentTag>> message="tm-remove-tag" class="tc-btn-invisible">{{$:/core/images/cancel-button}}</$button></$fieldmangler>
+<$reveal state=<<currentlyPlaying>> text={{!!title}} type="nomatch"><$fieldmangler><$button  param= <<currentTag>> message="tm-remove-tag" class="tc-btn-invisible">{{$:/core/images/cancel-button}}</$button></$fieldmangler>
 <$link><span class="tc-taglistplain"><$view field="title"/></span></$link>
 </$reveal>
-<$reveal state=<<synctid>> text={{!!title}} type="match"><$fieldmangler><$button  param= <<currentTag>> message="tm-remove-tag" class="tc-btn-invisible">{{$:/core/images/cancel-button}}</$button></$fieldmangler>
+<$reveal state=<<currentlyPlaying>> text={{!!title}} type="match"><$fieldmangler><$button  param= <<currentTag>> message="tm-remove-tag" class="tc-btn-invisible">{{$:/core/images/cancel-button}}</$button></$fieldmangler>
 <$link><span class="tc-taglist"><$view field="title"/></span></$link></$reveal>

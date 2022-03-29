@@ -1,16 +1,14 @@
 title: $:/bj/templates/playMultListsBasic
 type: text/vnd.tiddlywiki
 
-
 <$vars currentPlayList=<<qualify "$:/temp/">> currentTag=<<currentTiddler>>>
 <$playlist filter="[tag<currentTiddler>]" syntid=<<currentPlayList>>  mode="dynamic">
-
-{{$:/bj/buttonprevlist}}
+{{$:/bj/buttonprevlist}} 
 {{$:/bj/buttonnextlist}}
 
 <$linkcatcher message="tm-ply-move">
 
-<$list filter="[tag<currentTiddler>]" template="$:/bj/templates/currentListBasic" emptyMessage="Tag a tiddler with this tiddler to add to the list of playlists"/>
+<$list filter="[tag<currentTiddler>]" template="$:/bj/templates/currentListBasic" emptyMessage="Tag a tiddler with this tiddler to add to the list of playlists"></$list>
 
 </$linkcatcher>
 
@@ -23,6 +21,11 @@ type: text/vnd.tiddlywiki
 </$vars>
 </$playlist>
 </$vars>
+
+
+
+
+
 
 
 

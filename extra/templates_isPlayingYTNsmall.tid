@@ -3,6 +3,6 @@ type: text/vnd.tiddlywiki
 
 <$macrocall $name=formatHMS num={{!!yt-start}}/> 
 <$link>
-       <$reveal state=<<synctid>> text={{!!title}} type="nomatch"><span class="tc-taglistplain"><$view field="summary"><<currentTag>></$view></span></$reveal>
-       <$reveal state=<<synctid>> text={{!!title}} type="match">    <span class="tc-taglist"><$view field="summary"><<currentTag>></$view></span></$reveal>
+       <$reveal state=<<currentlyPlaying>> text={{!!title}} type="nomatch"><span class="tc-taglistplain"><$view field="summary"><<currentTag>></$view></span></$reveal>
+       <$reveal state=<<currentlyPlaying>> text={{!!title}} type="match">    <span class="tc-taglist"><$view field="summary"><<currentTag>></$view></span></$reveal>
 </$link><br/>

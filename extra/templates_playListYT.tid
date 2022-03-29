@@ -1,21 +1,12 @@
 title: $:/bj/templates/playListYT
 type: text/vnd.tiddlywiki
 
-<$vars synctid=<<qualify "$:/temp/">>>
-<$msequence filter="[tag<currentTiddler>]" syntid=<<synctid>>  mode="dynamic"  onEnd="tm-ply-next" autoStart="yes">
+<$vars currentlyPlaying=<<qualify "$:/temp/">>>
+<$msequence filter="[tag<currentTiddler>]" syntid=<<currentlyPlaying>>  mode="dynamic"  onEnd="tm-ply-next" autoStart="yes">
 <$ytplayer onEnd="tm-mply-next" onStart="tm-mply-caught"  deltas="5.0"/>
-<$button><$action-sendmessage $message="tm-mply-prev" />
-^
-</$button>
-<$button><$action-sendmessage $message="tm-mply-forcenext" />
-v
-</$button>
-<$button><$action-sendmessage $message="tm-mply-stick" />
-O
-</$button>
-<$button><$action-sendmessage $message="tm-mply-unstick" />
-Φ
-</$button>
+{{$:/bj/buttonup}}
+{{$:/bj/buttondown}}
+{{$:/bj/buttonloop}}
 <$linkcatcher message="tm-mply-move">
 <$set name=currentTag value=<<currentTiddler>>>
 <h2>Control individual playlists using drag and drop</h2>

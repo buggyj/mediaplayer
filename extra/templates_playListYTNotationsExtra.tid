@@ -3,38 +3,38 @@ type: text/vnd.tiddlywiki
 
 \define currentAsTag() [[$(currentTiddler)$]]
 \define sliceOfCurrent()  $(currentTiddler)$/slice
-\define MakeTemplate(tmpl:$:/bj/templates/isPlayingYTN) {{||$tmpl$}}
-\define MakeEditTemplate(tmpl:$:/bj/templates/isEditYTNextra) {{||$tmpl$}}
 \define extra(tid) <$transclude tiddler="$tid$/extra" mode="block"/>
 \define extraedit(tid) <$edit-text tiddler="$tid$/extra" class="bjeditbox"/>
-<$vars synctid=<<qualify "$:/temp/">> >
-<$msequence filter="[tag<currentTiddler>]" syntid=<<synctid>>  mode="dynamic"  onEnd="tm-ply-next" autoStart="yes">
+
+
+<$vars currentlyPlaying=<<qualify "$:/temp/">> >
+<$msequence filter="[tag<currentTiddler>]" syntid=<<currentlyPlaying>>  mode="dynamic"  onEnd="tm-ply-next" autoStart="yes">
 
 
 <$ytplayer onStart="tm-mply-caught"    onEnd={{!!endaction}}  deltas="5.0" doLog="true">
 
-<$reveal type="match" state="$:/state/SampleReveal2" text="show">
-<$button set="$:/state/SampleReveal2" setTo="hide">X</$button>
+<$reveal type="match" state="$:/temp/YTplayer" text="show">
+<$button set="$:/temp/YTplayer" setTo="hide">X</$button>
    <$button label="set yt-start">yt-start = slider
       <$action-sendmessage $message="tm-mpause"/>
       <$dupvar readvar="playertime" writevar="starttime" refresh="yes" >
-         <$action-setfield $tiddler={{{[<synctid>get[text]]}}} yt-start=<<starttime>>/>
+         <$action-setfield $tiddler={{{[<currentlyPlaying>get[text]]}}} yt-start=<<starttime>>/>
       </$dupvar>
    </$button>
    <$button label="set yt-end">yt-end = slider
       <$action-sendmessage $message="tm-mpause"/>
       <$dupvar readvar="playertime" writevar="endtime" refresh="yes" >
-         <$action-setfield $tiddler={{{[<synctid>get[text]]}}} yt-end=<<endtime>>/>
+         <$action-setfield $tiddler={{{[<currentlyPlaying>get[text]]}}} yt-end=<<endtime>>/>
       </$dupvar>
    </$button>
-<$edit-text tiddler={{{[<synctid>get[text]]}}} field="summary"/>
+<$edit-text tiddler={{{[<currentlyPlaying>get[text]]}}} field="summary"/>
 {{$:/bj/buttonrewind}}
 {{$:/bj/buttonfastforward}}
 </$reveal>
 </$ytplayer>
 
-<$reveal type="nomatch" state="$:/state/SampleReveal2" text="show">
-<$button set="$:/state/SampleReveal2" setTo="show">🖊️</$button>
+<$reveal type="nomatch" state="$:/temp/YTplayer" text="show">
+<$button set="$:/temp/YTplayer" setTo="show">🖊️</$button>
 </$reveal>
 {{$:/bj/buttonup}}
 {{$:/bj/buttondown}}
@@ -43,7 +43,7 @@ Mode:<$select field="endaction" default={{!!endaction}}>
 <option value="tm-mply-next">continuous</option>
 <option value="">stopping</option>
 </$select>
-<$reveal type="match" state="$:/state/SampleReveal2" text="show">
+<$reveal type="match" state="$:/temp/YTplayer" text="show">
 <$vars  tag=<<currentAsTag>>>
 <h2>Control playlists order using drag and drop</h2>
 <$button>
@@ -53,34 +53,39 @@ Mode:<$select field="endaction" default={{!!endaction}}>
 </$button>
 </$vars>
 <$linkcatcher message="tm-mply-move">
-<$vars template={{{[all[current]get[edittemplate]]}}} currentTag=<<currentTiddler>>>
-<$taglist class="btn btn-primary" targeTtag=<<currentTiddler>>  emptyMessage="start again" noadd="true"><$macrocall $name ="MakeEditTemplate" tmpl=<<template>>/></$taglist>
+<$vars currentTag=<<currentTiddler>>>
+<$taglist class="btn btn-primary" targeTtag=<<currentTiddler>>  emptyMessage="start again" noadd="true">
+  <$transclude tiddler={{{[<currentTag>get[edittemplate]] +[trim[]]}}}>
+	 <$transclude tiddler={{{[title[$:/bj/default/templates/isEditYTN]get[text]] +[trim[]]}}}>
+	 no template found in $:/bj/default/templates/isEditYTN
+	 </$transclude>
+  </$transclude> 
+</$taglist>
 </$vars>
 </$linkcatcher>
-
-<$vars tid={{{[<synctid>get[text]]}}}>
+<$vars tid={{{[<currentlyPlaying>get[text]]}}}>
 
 <$list filter="[title<tid>] +[has[title]]" >
-<$macrocall $name="extraedit" tid={{{[<synctid>get[text]]}}}/>
+<$macrocall $name="extraedit" tid={{{[<currentlyPlaying>get[text]]}}}/>
 </$list>
 
 </$vars>
-
 </$reveal>
 
-<$reveal type="nomatch" state="$:/state/SampleReveal2" text="show">
+<$reveal type="nomatch" state="$:/temp/YTplayer" text="show">
 <$linkcatcher message="tm-mply-move">
-<$vars template={{{[all[current]get[template]]}}} currentTag=<<currentTiddler>>>
+<$vars currentTag=<<currentTiddler>>>
 <$list filter="[tag<currentTiddler>]">
-<$macrocall $name ="MakeTemplate" tmpl=<<template>>/>
+  <$transclude tiddler={{{[<currentTag>get[template]] +[trim[]]}}}>
+	 <$transclude tiddler={{{[title[$:/bj/default/templates/isPlayingYTN]get[text]] +[trim[]]}}}>
+	 no template found in $:/bj/default/templates/isPlayingYTN
+	 </$transclude>
+  </$transclude> 
 </$list>
 </$vars>
 </$linkcatcher>
-
-<$macrocall $name="extra" tid={{{[<synctid>get[text]]}}}/>
-
+<$macrocall $name="extra" tid={{{[<currentlyPlaying>get[text]]}}}/>
 </$reveal>
-
 </$msequence>
 
 

@@ -48,8 +48,10 @@ Mode:<$select field="endaction" default={{!!endaction}}>
 <h2>Control playlists order using drag and drop</h2>
 <$button>
 ➕
-<$action-createtiddler $basetitle=<<sliceOfCurrent>> tags=<<tag>> _canonical_uri={{!!location}} yt-start="00:00:00"  yt-end="00:00:00" summary="" type="video/x-youtube">
+<$vars playing={{{[<currentlyPlaying>get[text]else[]]}}}>
+<$action-createtiddler $basetitle=<<sliceOfCurrent>> tags=<<tag>> _canonical_uri={{!!location}} yt-start={{{[<playing>get[yt-end]else[0]]}}}  yt-end="00:00:00" summary="" type="video/x-youtube">
 </$action-createtiddler>
+</$vars>
 </$button>
 </$vars>
 <$linkcatcher message="tm-mply-move">

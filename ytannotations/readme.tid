@@ -1,0 +1,5 @@
+title: $:/plugins/bj/mediaplayerYTA/readme
+type: text/vnd.tiddlywiki
+
+
+This plugin uses $:/plugins/bj/drag-and-drop greater than version 1.13.2  obtain from https://github.com/buggyj/tw5-tools/releases/tag/1.13.2-dnd

@@ -1,0 +1,119 @@
+title: $:/bj/templates/playAudioNotationsExtraText
+type: text/vnd.tiddlywiki
+
+\define currentAsTag() [[$(currentTiddler)$]]
+\define sliceOfCurrent()  $(currentTiddler)$/slice
+\define MakeEditTemplate(tmpl:$:/bj/templates/isEditAVNextra) {{||$tmpl$}}
+\define extra(tid) <$transclude tiddler="$tid$/extra" mode="block"/>
+\define extraedit(tid) <$edit-text tiddler="$tid$/extra" class="bjeditbox"/>
+<$vars currentlyPlaying=<<qualify "$:/temp/">> >
+<$msequence filter="[tag<currentTiddler>]" syntid=<<currentlyPlaying>>  mode="dynamic"  onEnd="tm-ply-next" autoStart="yes">
+
+
+<$vplayer onStart="tm-mply-caught"    onEnd={{!!endaction}}  deltas="5.0" doLog="true">
+
+<$reveal type="match" state="$:/temp/editplaylist" text="show">
+<$button set="$:/temp/editplaylist" setTo="hide">X</$button>
+{{$:/bj/buttonrewind}}
+{{$:/bj/buttonfastforward}}
+   <$button label="set starttime">starttime = slider
+      <$action-sendmessage $message="tm-mpause"/>
+      <$dupvar readvar="playertime" writevar="starttime" refresh="yes" >
+         <$action-setfield $tiddler={{{[<currentlyPlaying>get[text]]}}} starttime=<<starttime>>/>
+      </$dupvar>
+   </$button>
+<$edit-text tiddler={{{[<currentlyPlaying>get[text]]}}} field="summary"/>
+   <$button label="set endtime">  endtime = slider
+      <$action-sendmessage $message="tm-mpause"/>
+      <$dupvar readvar="playertime" writevar="endtime" refresh="yes" >
+         <$action-setfield $tiddler={{{[<currentlyPlaying>get[text]]}}} endtime=<<endtime>>/>
+      </$dupvar>
+   </$button>
+
+
+<$button>
+➕
+<$vars playing={{{[<currentlyPlaying>get[text]else[]]}}}>
+<$action-createtiddler $basetitle=<<sliceOfCurrent>> tags=<<currentAsTag>> _canonical_uri={{!!location}} starttime={{{[<playing>get[endtime]else[0]]}}}  endtime="00:00:00" summary="" type="video/mp4">
+</$action-createtiddler>
+<$action-sendmessage $message="tm-mply-forcenext" />
+</$vars>
+</$button>
+</$reveal>
+</$vplayer>
+
+<$reveal type="nomatch" state="$:/temp/editplaylist" text="show">
+<$button set="$:/temp/editplaylist" setTo="show">🖊️</$button>
+</$reveal>
+{{$:/bj/buttonup}}
+{{$:/bj/buttondown}}
+{{$:/bj/buttonloop}}
+Mode:<$select field="endaction" default={{!!endaction}}>
+<option value="tm-mply-next">continuous</option>
+<option value="">stopping</option>
+</$select>
+<!--- ---editing--- --->
+<$reveal type="match" state="$:/temp/editplaylist" text="show">
+<$vars  tag=<<currentAsTag>>>
+<h2>Control playlists order using drag and drop</h2>
+<$button>
+➕
+<$vars playing={{{[<currentlyPlaying>get[text]else[]]}}}>
+<$action-createtiddler $basetitle=<<sliceOfCurrent>> tags=<<tag>> _canonical_uri={{!!location}} starttime={{{[<playing>get[endtime]else[0]]}}}  endtime="00:00:00" summary="" type="video/mp4">
+</$action-createtiddler>
+</$vars>
+</$button>
+</$vars>
+<$linkcatcher message="tm-mply-move">
+<$vars currentTag=<<currentTiddler>>>
+<$taglist class="btn btn-primary" targeTtag=<<currentTiddler>>  emptyMessage="start again" noadd="true">
+  <$transclude tiddler={{{[<currentTag>get[edittemplate]] +[trim[]]}}}>
+	 <$transclude tiddler={{{[title[$:/bj/default/templates/isEditAVA]get[text]] +[trim[]]}}}>
+	 no template found in $:/bj/default/templates/isEditAVA
+	 </$transclude>
+  </$transclude> 
+</$taglist>
+</$vars>
+</$linkcatcher>
+
+<$vars isplaying={{{[<currentlyPlaying>get[text]]}}}>
+
+<$list filter="[title<isplaying>] +[has[title]]" >
+<$macrocall $name="extraedit" tid=<<isplaying>>/>
+</$list>
+
+</$vars>
+</$reveal>
+
+<!--- ---viewing--- --->
+<$reveal type="nomatch" state="$:/temp/editplaylist" text="show">
+<$linkcatcher message="tm-mply-move">
+
+<$vars currentTag=<<currentTiddler>>>
+<$list filter="[tag<currentTiddler>]">
+  <$transclude tiddler={{{[<currentTag>get[template]] +[trim[]]}}}>
+	 <$transclude tiddler={{{[title[$:/bj/default/templates/isPlayingAVA]get[text]] +[trim[]]}}}>
+	 no template found in $:/bj/default/templates/isPlayingAVA
+	 </$transclude>
+  </$transclude> 
+</$list>
+</$vars>
+
+<$vars template={{{[all[current]get[template]]}}} currentTag=<<currentTiddler>>>
+<$list filter="[tag<currentTiddler>]">
+     <$macrocall $name ="MakeTemplate" tmpl=<<template>>/></$list>
+</$vars>
+</$linkcatcher>
+
+<$macrocall $name="extra" tid={{{[<currentlyPlaying>get[text]]}}}/>
+
+</$reveal>
+
+</$msequence>
+
+
+
+
+
+
+

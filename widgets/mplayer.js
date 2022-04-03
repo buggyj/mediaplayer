@@ -149,6 +149,7 @@ MPlayerWidget.prototype.refresh = function(changedTiddlers) {
 		return true;
 	}
 	else {
+        if(changedAttributes["onEnd"]) this.onEnd = this.getAttribute("onEnd");
 		return this.refreshChildren(changedTiddlers);
 	}
 };

@@ -68,7 +68,9 @@ MPlayerWidget.prototype.render = function(parent,nextSibling) {
 	this.pNode = this.document.createElement(this.el);
 	this.audiodomNode = this.document.createElement(this.tag);
 	this.audiodomNode.addEventListener("ended",function (event) {
-		if (self.onEnd){
+		console.log ("mplayer track ended ");
+		if (self.onEnd && !this.finished){
+			self.finished = true;
 			self.dispatchEvent({
 			type: self.onEnd
 			});	
@@ -86,22 +88,25 @@ MPlayerWidget.prototype.render = function(parent,nextSibling) {
 	this.cNode.setAttribute("hidden","true");
 };
 
+MPlayerWidget.prototype.finished = false;
+ 
 MPlayerWidget.prototype.ourmedia = function(event) {
-		var tid;
-		if ((tid = this.wiki.getTiddler(event.tiddler)) 
-			&& (tid.fields.type === this.media)) {
+		var tid  = this.wiki.getTiddler(event.tiddler);
+		if ((tid) && (tid.fields.type === this.media)) {
 			return true;
 		}
 		return false;
 }
 MPlayerWidget.prototype.doAction = function(triggeringWidget,event) {
 	if (event.type == "preStart" && this.currentplayer && !this.ourmedia(event)) { 
+		console.log ("mplayer preStart not ours");
 		this.audiodomNode.setAttribute("hidden","true");
 		this.cNode.setAttribute("hidden","true");
 		this.currentplayer = false;
-		this.handleStopEvent();
+		this.handlePauseEvent();
 	}
 	if (event.type == "start" && this.ourmedia(event)) {
+		console.log ("mplayer start ours");
 		if (!this.currentplayer) {
 			this.currentplayer = true;
 			if (this.display =="yes") {
@@ -111,6 +116,7 @@ MPlayerWidget.prototype.doAction = function(triggeringWidget,event) {
 				this.cNode.removeAttribute("hidden");
 			}
 		}
+		this.finished = false;
 		this.handleStartEvent(event);
 	}
 
@@ -154,12 +160,37 @@ MPlayerWidget.prototype.refresh = function(changedTiddlers) {
 	}
 };
 
+MPlayerWidget.prototype.updater = function updater(event) {
 
+	this.setVariable("playertime",this.audiodomNode.currentTime.toString());
+	//console.log ("aud.cur"+this.audiodomNode.currentTime+"get"+ this.variables["playertime"].value);
+	   if(this.playTime > 0 && this.audiodomNode.currentTime > this.beginTime + this.playTime){//if playtime <= 0 play till end
+		   //console.log (this.audiodomNode.currentTime+"c-s"+(this.beginTime + this.playTime));
+
+		  // this.audiodomNode.removeEventListener('timeupdate',this.updater);
+		   this.handlePauseEvent(event);
+	 
+			if (this.onEnd && !this.finished){
+				this.finished = true;
+				this.dispatchEvent({
+				type: this.onEnd
+				});	
+			}
+		}		
+	};
 
 MPlayerWidget.prototype.handleStartEvent = function(event) {
 	var player = this.audiodomNode;
 	var self = this,additionalFields,track,tid;
-
+	var canlisener = function()  { 
+		console.log ("entered canlisener");
+		player.currentTime =  self.beginTime;
+		player.removeEventListener('canplay', arguments.callee);
+		player.volume =  self.volume * self.equalize;
+		console.log ("start player");
+		self.audiodomNode.addEventListener('timeupdate', self.updater.bind(self));
+		player.play();
+	} 
 	{
 		additionalFields = event;
 		if ((tid = this.wiki.getTiddler(additionalFields.tiddler)) ) {
@@ -184,62 +215,50 @@ MPlayerWidget.prototype.handleStartEvent = function(event) {
 
 	}
 	try {
-	player.src = track+"#t"+self.beginTime+ (self.playTime>0?","+self.stopTime:"");//if playtime <= 0 play till end
-	player.controls ="controls";
-	
-	player.load();
-	if (this.onStart){
-		this.dispatchEvent({
-		type: this.onStart
-		});	
-	}
-	var canlisener = function()  { 
-			player.currentTime =  self.beginTime;
-			player.removeEventListener('canplay', arguments.callee);
-			player.volume =  self.volume * self.equalize;
-			console.log ("start player");
+		if (player.src != track){
+			player.src = track;//if playtime <= 0 play till end
+			player.controls ="controls";
 			
-			self.audiodomNode.addEventListener('timeupdate', function updater(event) {
-			self.setVariable("playertime",self.audiodomNode.currentTime.toString());
-		    //console.log ("aud.cur"+self.audiodomNode.currentTime+"get"+ self.variables["playertime"].value);
-			   if(self.playTime > 0 && self.audiodomNode.currentTime > self.beginTime + self.playTime){//if playtime <= 0 play till end
-				   //console.log (self.audiodomNode.currentTime+"c-s"+(self.beginTime + self.playTime))
-				   self.audiodomNode.removeEventListener('timeupdate',updater);
-				   self.handleStopEvent(event);
-			 
-					if (self.onEnd){
-						self.dispatchEvent({
-						type: self.onEnd
-						});	
-					}
-				}		
-			});
-		} 
-	if (true) {
-		player.addEventListener("canplay",canlisener);
-		player.addEventListener("error",function()  { 
-			player.currentTime =  self.beginTime;
-			player.removeEventListener('canplay', canlisener);
-			player.removeEventListener('error', arguments.callee);
-			console.log ("error canplay player");
-			if (self.onEnd){
-							self.dispatchEvent({
-							type: self.onEnd
-							});	
-			}
-		})
-	}
-	if (!self.wait) player.play();
-	} catch(e) {};
-	
+			player.load();
+			player.addEventListener("canplay",canlisener);
+			player.addEventListener("error",function()  { 
+				//player.currentTime =  self.beginTime;
+				player.removeEventListener('canplay', canlisener);
+				player.removeEventListener('error', arguments.callee);
+				console.log ("error canplay player");
+				if (self.onEnd){
+					self.dispatchEvent({
+					type: self.onEnd
+					});	
+				}
+			})
+		} else {
+			if (player.currentTime - self.beginTime>0.5||player.currentTime - self.beginTime<0){
+				
+				player.currentTime =  self.beginTime;
+				//player.addEventListener("canplay",canlisener);
+			} 
+			player.volume =  self.volume * self.equalize;	
+			if (!self.wait) player.play();
+		}
+		if (this.onStart){
+			this.dispatchEvent({
+			type: this.onStart
+			});	
+		}
 
+	} catch(e) {console.log(e);};
+	
 	return false;//always consume event
 };
 MPlayerWidget.prototype.handleStopEvent = function(event) {
 	var player = this.audiodomNode;
+console.log("mplayer stopping");
+this.finished = true;
 	try {
 	player.pause();
     player.currentTime = 0;	
+   player.removeEventListener('timeupdate',this.updater);
     } catch(e) {};
 	return false;//always consume event
 };
@@ -247,10 +266,10 @@ MPlayerWidget.prototype.handlePlayEvent = function(event) {
 	var player = this.audiodomNode;
 	try {	
 	if (player.paused) {
-		console.log ("start play");
+		console.log ("mplayer start play ");
 		player.play();
 	}
-    } catch(e) {console.log ("start fail");};
+    } catch(e) {console.log ("mplayer start fail");};
 	return false;//always consume event
 };
 MPlayerWidget.prototype.handlePauseEvent = function(event) {

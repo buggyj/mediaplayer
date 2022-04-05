@@ -264,6 +264,7 @@ MPlayListWidget.prototype.doAgain = function() {
 				this.doActions(this,{type:"start",tiddler: this.list[i]});
 				if (this.caught) {
 					this.settid(i);
+					break;
 				}
 			}
 		}
@@ -283,7 +284,7 @@ MPlayListWidget.prototype.handleReStart = function(event) {
 MPlayListWidget.prototype.handleNextEvent = function(event) {
 
     if (this.mode == "dynamic") this.updatelist();
-	if (this.sticky && this.n==(this.list.length-1)) this.doAgain();
+	if (this.sticky && this.n==(this.list.length-1)) this.doStart();
 	else this.doNext();
 	return false; // dont propegate
 }

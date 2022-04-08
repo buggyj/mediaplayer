@@ -11,7 +11,7 @@ module-type: widget
 /*jslint node: true, browser: true */
 /*global $tw: false */
 "use strict";
-
+var debug = require("$:/bj/modules/widgets/log.js").bjmseqlog();
 var Widget = require("$:/core/modules/widgets/widget.js").widget;
 
 var MPlayListWidget = function(parseTreeNode,options) {
@@ -113,7 +113,7 @@ MPlayListWidget.prototype.settid = function(i){
 }
 	
 MPlayListWidget.prototype.doMove = function(loc) {
-	console.log ("doMove "+this.n);
+	debug ("doMove "+this.n);
 	if (this.mode == "dynamic") this.updatelist();
 	if(this.list.length === 0) {
 		//do nothing
@@ -137,14 +137,14 @@ MPlayListWidget.prototype.doMove = function(loc) {
 	}
 }
 MPlayListWidget.prototype.doStart = function() {
-	console.log ("doStart "+this.n);
+	debug ("doStart "+this.n);
 	if (this.mode == "dynamic") this.updatelist();
 	this.n = -1;
 	if(this.list.length === 0) {
 		//do nothing
 	} else {
 		var tid,i;
-			if ((this.onEnd) && (this.n == this.list.length -1)){console.log("onend "+this.n);
+			if ((this.onEnd) && (this.n == this.list.length -1)){debug("onend "+this.n);
 			if (this.onEndParam) {
 				this.dispatchEvent({
 				type: this.onEnd,
@@ -169,7 +169,7 @@ MPlayListWidget.prototype.doStart = function() {
 					this.settid(i);
 				}
 				this.doActions(this,{type:"start",tiddler: this.list[i]});
-				if (this.caught) { console.log("dostart caught "+i)
+				if (this.caught) { debug("dostart caught "+i)
 					this.settid(i);
 					break;
 				}
@@ -181,7 +181,7 @@ MPlayListWidget.prototype.doStart = function() {
 }
 
 MPlayListWidget.prototype.doNext = function() {
-	console.log ("doNext "+this.n);
+	debug ("doNext "+this.n);
 	if (this.mode == "dynamic") this.updatelist();
 	if(this.list.length === 0) {
 		//do nothing
@@ -221,7 +221,7 @@ MPlayListWidget.prototype.doNext = function() {
 	}
 }
 MPlayListWidget.prototype.doPrev = function() {
-	console.log ("doPrev "+this.n);
+	debug ("doPrev "+this.n);
 	if (this.mode == "dynamic") this.updatelist();
 	if(this.list.length === 0) {
 		//do nothing
@@ -247,7 +247,7 @@ MPlayListWidget.prototype.doPrev = function() {
 }
 
 MPlayListWidget.prototype.doAgain = function() {
-	console.log ("doAgain "+this.n);	
+	debug ("doAgain "+this.n);	
 	if (this.mode == "dynamic") this.updatelist();
 	if(this.list.length === 0) {
 		//do nothing

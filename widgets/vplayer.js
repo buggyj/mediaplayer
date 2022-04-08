@@ -13,6 +13,7 @@ module-type: widget
 
 
 
+var debug = require("$:/bj/modules/widgets/log.js").bjvplayerlog();
 var Widget = require("$:/bj/modules/widgets/mplayer.js").mplayer;
 
 var MPlayerWidget = function(parseTreeNode,options) {
@@ -24,6 +25,8 @@ var MPlayerWidget = function(parseTreeNode,options) {
 Inherit from the base widget class
 */
 MPlayerWidget.prototype = Object.create(Widget.prototype);
+
+MPlayerWidget.prototype.debug = function () {debug.apply(null,arguments);}
 
 MPlayerWidget.prototype.tag = "video";
 

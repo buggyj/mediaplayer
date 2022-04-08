@@ -14,6 +14,7 @@ if($tw.browser)  {
 /*global $tw: false */
 
 var newid = 0;
+var debug = require("$:/bj/modules/widgets/log.js").bjytplayerlog();
 var Widget = require("$:/core/modules/widgets/widget.js").widget;
 
 var YTrawWidget = function(parseTreeNode,options) {
@@ -79,10 +80,10 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 				},
 		  'onStateChange': function (event) {
 			self.setVariable("playertime",(event.target.getCurrentTime()).toString());
-			console.log("playertime",(event.target.getCurrentTime()).toString());
+			//debug("playertime",(event.target.getCurrentTime()).toString());
 			  self.debug.log ("ytstate"+event.data)
 				if (event.data == YT.PlayerState.ENDED) {
-					if ( event.target.getCurrentTime() < 1) {console.log ("api time strange "+event.target.getCurrentTime());return;} else console.log (self.end+" api time normal "+event.target.getCurrentTime())
+					if ( event.target.getCurrentTime() < 1) {debug ("api time strange "+event.target.getCurrentTime());return;} else debug (self.end+" api time normal "+event.target.getCurrentTime())
 					//self.started=false;
 					if (self.onEnd){self.debug.log ("yt send stop");
 						self.dispatchEvent({
@@ -172,7 +173,7 @@ YTrawWidget.prototype.execute = function() {
 	this.doLog = this.getAttribute("doLog");
 	this.debug = this.doLog ? console :{log:function(x){}};
     // Construct the child widgets
-	this.makeChildWidgets();console.log("startytraw "+ this.onStart);
+	this.makeChildWidgets();debug("startytraw "+ this.onStart);
 };
 
 /*
@@ -187,7 +188,7 @@ try {
 		YTrawWidget.prototype.config = $tw.wiki.getTiddlerData("$:/bj/modules/widgets/ytplayer/config.json");
 		YTrawWidget.prototype.extractid = new RegExp(YTrawWidget.prototype.config.extractidregx);
 	} catch(e) {
-		console.log("invalid config format");
+		debug("invalid config format");
 		YTrawWidget.prototype.config = {};
 		YTrawWidget.prototype.extractid = /(youtu\.be\/|[?&]v=)([^&]+)/;
 	}
@@ -268,7 +269,7 @@ YTrawWidget.prototype.handlePauseEvent = function(event) {
 	try {
 	player.pauseVideo();
 	this.setVariable("playertime",this.player.getCurrentTime().toString());
-	console.log("paused at"+this.player.getCurrentTime().toString())
+	debug("paused at"+this.player.getCurrentTime().toString())
     } catch(e) {};
 	return false;//always consume event
 };

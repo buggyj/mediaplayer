@@ -3,7 +3,7 @@ type: text/vnd.tiddlywiki
 
 \define currentAsTag() [[$(currentTiddler)$]]
 \define sliceOfCurrent()  $(currentTiddler)$/slice
-\define MakeEditTemplate(tmpl:$:/bj/templates/isEditAVNextra) {{||$tmpl$}}
+\define CreateTid(WithField)<$action-createtiddler $basetitle=<<sliceOfCurrent>> tags=<<currentAsTag>> _canonical_uri={{!!location}} starttime={{{[<playing>get[endtime]else[0]]}}}  endtime="00:00:00" %WithField%="" type="video/mp4"/>
 \define extra(tid) <$transclude tiddler="$tid$/extra" mode="block"/>
 \define extraedit(tid) <$edit-text tiddler="$tid$/extra" class="bjeditbox"/>
 <$vars currentlyPlaying=<<qualify "$:/temp/">> >
@@ -22,7 +22,7 @@ type: text/vnd.tiddlywiki
          <$action-setfield $tiddler={{{[<currentlyPlaying>get[text]]}}} starttime=<<starttime>>/>
       </$dupvar>
    </$button>
-<$edit-text tiddler={{{[<currentlyPlaying>get[text]]}}} field="summary"/>
+<$edit-text tiddler={{{[<currentlyPlaying>get[text]]}}} field={{{[title[$:/bj/default/field/isAVA]get[text]] +[trim[]]}}}/>
    <$button label="set endtime">  endtime = slider
       <$action-sendmessage $message="tm-mpause"/>
       <$dupvar readvar="playertime" writevar="endtime" refresh="yes" >
@@ -34,8 +34,7 @@ type: text/vnd.tiddlywiki
 <$button>
 ➕
 <$vars playing={{{[<currentlyPlaying>get[text]else[]]}}}>
-<$action-createtiddler $basetitle=<<sliceOfCurrent>> tags=<<currentAsTag>> _canonical_uri={{!!location}} starttime={{{[<playing>get[endtime]else[0]]}}}  endtime="00:00:00" summary="" type="video/mp4">
-</$action-createtiddler>
+<$macrocall $name="CreateTid" WithField={{{[title[$:/bj/default/field/isAVA]get[text]] +[trim[]]}}}/>
 <$action-sendmessage $message="tm-mply-forcenext" />
 </$vars>
 </$button>
@@ -54,16 +53,15 @@ Mode:<$select field="endaction" default={{!!endaction}}>
 </$select>
 <!--- ---editing--- --->
 <$reveal type="match" state="$:/temp/editplaylist" text="show">
-<$vars  tag=<<currentAsTag>>>
+
 <h2>Control playlists order using drag and drop</h2>
 <$button>
 ➕
 <$vars playing={{{[<currentlyPlaying>get[text]else[]]}}}>
-<$action-createtiddler $basetitle=<<sliceOfCurrent>> tags=<<tag>> _canonical_uri={{!!location}} starttime={{{[<playing>get[endtime]else[0]]}}}  endtime="00:00:00" summary="" type="video/mp4">
-</$action-createtiddler>
+<$macrocall $name="CreateTid" WithField={{{[title[$:/bj/default/field/isAVA]get[text]] +[trim[]]}}}/>
 </$vars>
 </$button>
-</$vars>
+
 <$linkcatcher message="tm-mply-move">
 <$vars currentTag=<<currentTiddler>>>
 <$taglist class="btn btn-primary" targeTtag=<<currentTiddler>>  emptyMessage="start again" noadd="true">

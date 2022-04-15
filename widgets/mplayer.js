@@ -68,7 +68,7 @@ MPlayerWidget.prototype.render = function(parent,nextSibling) {
 	this.pNode = this.document.createElement(this.el);
 	this.audiodomNode = this.document.createElement(this.tag);
 	this.audiodomNode.addEventListener("ended",function (event) {
-		this.debug ("mplayer track ended ");
+		self.debug ("mplayer track ended ");
 		if (self.onEnd && !this.finished){
 			self.finished = true;
 			self.dispatchEvent({

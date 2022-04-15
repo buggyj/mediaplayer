@@ -67,11 +67,11 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 		events: {
 		  'onReady':  function (event) {
 			 // alert("ready");
-			 self.debug.log ("ytready");
+			 debug ("ytready");
 						self.ready = true;
 						if (self.src) { //bj maybe add && selF.READY
 							var parms = {};
-							if (self.start) { parms.startSeconds  =parseInt(self.start);self.debug.log("startsec "+parms.startSeconds);} 
+							if (self.start) { parms.startSeconds  =parseInt(self.start);debug("startsec "+parms.startSeconds);} 
 							if (self.end) parms.endSeconds  =parseInt(self.end);
 							if (self.src) parms.videoId  =self.src ;
 							event.target.loadVideoById(parms);
@@ -81,11 +81,11 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 		  'onStateChange': function (event) {
 			self.setVariable("playertime",(event.target.getCurrentTime()).toString());
 			//debug("playertime",(event.target.getCurrentTime()).toString());
-			  self.debug.log ("ytstate"+event.data)
+			  debug ("ytstate"+event.data)
 				if (event.data == YT.PlayerState.ENDED) {
 					if ( event.target.getCurrentTime() < 1) {debug ("api time strange "+event.target.getCurrentTime());return;} else debug (self.end+" api time normal "+event.target.getCurrentTime())
 					//self.started=false;
-					if (self.onEnd){self.debug.log ("yt send stop");
+					if (self.onEnd){debug ("yt send stop");
 						self.dispatchEvent({
 						type: self.onEnd
 						});	
@@ -93,8 +93,8 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 				} 
 			},
 			'onError':function (event) {
-			  self.debug.log ("yterror"+event.data);
-			  if (self.onEnd){self.debug.log ("yt send stop");
+			  debug ("yterror"+event.data);
+			  if (self.onEnd){debug ("yt send stop");
 						self.dispatchEvent({
 						type: self.onEnd
 						});	
@@ -117,7 +117,7 @@ YTrawWidget.prototype.onPlayerReady = function (event) {
 	self.ready = true;
 	if (self.src) { //bj maybe add && selg
 		var parms = {};
-		if (self.start) {parms.startSeconds  =parseInt(self.start);this.debug.log("startsec "+parms.startSeconds);}
+		if (self.start) {parms.startSeconds  =parseInt(self.start);debug("startsec "+parms.startSeconds);}
 		if (self.end) parms.endSeconds  =parseInt(self.end);
 		if (self.src) parms.videoId  =self.src ;
 		event.target.loadVideoById(parms);
@@ -170,8 +170,6 @@ YTrawWidget.prototype.execute = function() {
 	this.height = this.getAttribute("height",320);
 	this.width = this.getAttribute("width",640);
 	this.onStart = this.getAttribute("onStart");
-	this.doLog = this.getAttribute("doLog");
-	this.debug = this.doLog ? console :{log:function(x){}};
     // Construct the child widgets
 	this.makeChildWidgets();debug("startytraw "+ this.onStart);
 };
@@ -208,7 +206,7 @@ YTrawWidget.prototype.handleStartEvent = function(event) {
 				}
 				else self.src ="";
 			}
-			if (tid.fields["yt-start"]) {self.start = tid.fields["yt-start"];this.debug.log ("has starttime");} else self.start = null;
+			if (tid.fields["yt-start"]) {self.start = tid.fields["yt-start"];debug ("has starttime");} else self.start = null;
 			if (tid.fields["yt-end"]) self.end = tid.fields["yt-end"];else self.end = null;
 			self.equalize = tid.fields.equalize || 1.0;
 		}	
@@ -217,7 +215,7 @@ YTrawWidget.prototype.handleStartEvent = function(event) {
 
 	if (self.ready) {
 		if (this.src) { //bj maybe add && selg
-			this.debug.log ("yt start ready");
+			debug ("yt start ready");
 		var parms = {};
 		if (self.start) parms.startSeconds= parseInt(self.start);
 		if (self.end) parms.endSeconds  =parseInt(self.end);
@@ -226,8 +224,8 @@ YTrawWidget.prototype.handleStartEvent = function(event) {
 		
 			
 		} 
-	} else this.debug.log ("yt start not ready");
-	if (self.onStart){this.debug.log ("yt send stop");
+	} else debug ("yt start not ready");
+	if (self.onStart){debug ("yt send stop");
 			self.dispatchEvent({
 			type: self.onStart
 			});	

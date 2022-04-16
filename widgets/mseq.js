@@ -52,6 +52,7 @@ MPlayListWidget.prototype.execute = function() {
 	this.n =-1;
 	this.autoStart = this.getAttribute("autoStart")
 	this.onEnd = this.getAttribute("onEnd");
+	this.final  = this.getAttribute("final");
 	this.onEndParam = this.getAttribute("onEndParam");
     this.syntid = this.getAttribute("syntid");
     this.mode = this.getAttribute("mode");
@@ -145,6 +146,7 @@ MPlayListWidget.prototype.doStart = function() {
 	} else {
 		var tid,i;
 			if ((this.onEnd) && (this.n == this.list.length -1)){debug("onend "+this.n);
+		    if (this.final) this.doActions(this,{type:"final"});
 			if (this.onEndParam) {
 				this.dispatchEvent({
 				type: this.onEnd,
@@ -188,6 +190,7 @@ MPlayListWidget.prototype.doNext = function() {
 	} else {
 		var tid,i;
 		if ((this.onEnd) && (this.n == this.list.length -1)){
+			if (this.final) this.doActions(this,{type:"final"});
 			if (this.onEndParam) {
 				this.dispatchEvent({
 				type: this.onEnd,

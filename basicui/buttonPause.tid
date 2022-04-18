@@ -1,0 +1,6 @@
+title: $:/bj/buttonPause
+type: text/vnd.tiddlywiki
+
+<$button><$action-sendmessage $message="tm-mpause" />
+⏸
+</$button>

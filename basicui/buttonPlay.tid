@@ -1,0 +1,6 @@
+title: $:/bj/buttonPlay
+type: text/vnd.tiddlywiki
+
+<$button><$action-sendmessage $message="tm-mply" />
+▶
+</$button>

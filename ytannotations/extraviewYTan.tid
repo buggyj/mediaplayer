@@ -1,0 +1,6 @@
+title: $:bj/templates/ytanExtraVeiw
+type: text/vnd.tiddlywiki
+
+\define extra() <$transclude tiddler="$(currentTiddler)$/extra" mode="block"/>
+
+<<extra>>

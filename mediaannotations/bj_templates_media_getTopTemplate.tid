@@ -1,0 +1,7 @@
+set: $:/bj/templates/Audio/Review
+tags: $:/bj/templates $:/bj/templates/media
+title: $:/bj/templates/media/getTopTemplate
+type: text/vnd.tiddlywiki
+
+\define MakeTemplate(tmpl:$:/bj/templates/media/playMultiLists) {{||$tmpl$}} 
+<$macrocall $name="MakeTemplate" tmpl={{$:/bj/default/templates/media/Top}}/>

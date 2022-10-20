@@ -1,0 +1,10 @@
+{
+	"plugins": [
+		"bj/mediaplayer/mediaannotations"
+	],
+		"doNotSave": [
+	],
+	"includeWikis": [
+		"../demo"
+	]
+}

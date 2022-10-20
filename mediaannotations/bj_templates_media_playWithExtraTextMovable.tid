@@ -1,0 +1,10 @@
+caption: Movable List
+tags: $:/bj/templates/media $:/bj/templates/media/ListTemplate
+title: $:/bj/templates/media/playWithExtraTextMovable
+type: text/vnd.tiddlywiki
+
+\import [title[$:/bj/templates/media/playWithExtraTextMovableMacro]]
+
+<$vars ptype={{{[title<currentTiddler>regexp:location[youtube]then[ytplayeran]else[vplayer]]}}} mtype={{{[title<currentTiddler>regexp:location[youtube]then[video/x-youtube]else[video/mp4]]}}} >
+<$macrocall $name=MakePlayer xplayer=<<ptype>>type=<<mtype>> subpath=media/>
+</$vars>

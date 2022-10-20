@@ -1,0 +1,19 @@
+tags: $:/bj/templates/media
+title: $:/bj/templates/media/ButtonsEditView
+type: text/vnd.tiddlywiki
+
+   <$button label="set starttime">starttime = slider
+      <$action-sendmessage $message="tm-mpause"/>
+      <$dupvar readvar="playertime" writevar="starttime" refresh="yes" >
+         <$action-setfield $tiddler={{{[<currentlyPlaying>get[text]]}}} starttime=<<starttime>>/>
+      </$dupvar>
+   </$button>
+<$edit-text tiddler={{{[<currentlyPlaying>get[text]]}}} field=<<dialogfield>>/>
+   <$button label="set endtime">  endtime = slider
+      <$action-sendmessage $message="tm-mpause"/>
+      <$dupvar readvar="playertime" writevar="endtime" refresh="yes" >
+         <$action-setfield $tiddler={{{[<currentlyPlaying>get[text]]}}} endtime=<<endtime>>/>
+      </$dupvar>
+   </$button>
+
+

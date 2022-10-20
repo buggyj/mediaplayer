@@ -1,0 +1,10 @@
+caption: Separate lines with del and link
+tags: $:/bj/templates/media $:/bj/templates/media/IsEdit
+title: $:/bj/templates/media/isEditDel
+type: text/vnd.tiddlywiki
+
+{{||$:/bj/buttons/ytslicedelete}}<$linkcatcher message="tm-mply-move"><$link> <$macrocall $name=formatHMS num={{!!starttime}}/> - <$macrocall $name=formatHMS num={{!!endtime}}/>
+</$link></$linkcatcher>
+       <$reveal state=<<currentlyPlaying>> text={{!!title}} type="nomatch"><span class="tc-taglistplain"><$transclude field="summary"><<currentTag>></$transclude></span></$reveal>
+       <$reveal state=<<currentlyPlaying>> text={{!!title}} type="match">    <span class="tc-taglist"><$transclude field="summary"><<currentTag>></$transclude></span></$reveal>
+<$link to=<<currentTiddler>>>@-></$link><br>

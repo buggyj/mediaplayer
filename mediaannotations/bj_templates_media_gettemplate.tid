@@ -1,0 +1,6 @@
+tags: 
+title: $:/bj/templates/media/gettemplate
+type: text/vnd.tiddlywiki
+
+\define MakeTemplate(tmpl:$:/bj/templates/media/playWithExtraText) {{||$tmpl$}} 
+<$macrocall $name="MakeTemplate" tmpl={{$:/bj/default/templates/media/PlayWith}}/>

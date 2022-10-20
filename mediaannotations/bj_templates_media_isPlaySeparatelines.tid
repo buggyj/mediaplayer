@@ -1,0 +1,10 @@
+caption: Separate lines with times
+tags: $:/bj/templates/media $:/bj/templates/media/IsPlay
+title: $:/bj/templates/media/isPlaySeparatelines
+type: text/vnd.tiddlywiki
+
+<$linkcatcher message="tm-mply-move"><$link> <$macrocall $name=formatHMS num={{!!starttime}}/>
+</$link></$linkcatcher>
+       <$reveal state=<<currentlyPlaying>> text={{!!title}} type="nomatch"><span class="tc-taglistplain"><$transclude field="summary">x{{!!title}}</$transclude></span></$reveal>
+       <$reveal state=<<currentlyPlaying>> text={{!!title}} type="match">    <span class="tc-taglist"><$transclude field="summary">x{{!!title}}</$transclude></span></$reveal>
+<br>

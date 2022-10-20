@@ -1,0 +1,6 @@
+caption: edit line visual
+tags: $:/bj/templates/media $:/bj/templates/media/IsEdit
+title: $:/bj/templates/media/isEditLineVisual
+type: text/vnd.tiddlywiki
+
+<$reveal state=<<currentlyPlaying>> text={{!!title}} type="nomatch"></$reveal> <$reveal state=<<currentlyPlaying>> text={{!!title}} type="match">   <$edit-html inline="true" field={{$:/bj/default/media/textfield}}/></$reveal>

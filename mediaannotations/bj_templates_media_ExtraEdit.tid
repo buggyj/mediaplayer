@@ -1,0 +1,15 @@
+list: 
+tags: $:/bj/templates/media/ExtraEditSelect
+title: $:/bj/templates/media/ExtraEdit
+type: text/vnd.tiddlywiki
+
+<$edit-text tiddler={{{[<currentlyPlaying>get[text]]}}} field="endtime"/>
+<$button>
+copy>
+<$vars playing={{{[<currentlyPlaying>get[text]else[]]}}}>
+<$list filter="[<playing>next<currentTiddler>]"  variable="next">
+<$macrocall $name="ModTid" tid=<<next>>/>
+<$action-sendmessage $message="tm-mply-forcenext" />
+</$list>
+</$vars>
+</$button>

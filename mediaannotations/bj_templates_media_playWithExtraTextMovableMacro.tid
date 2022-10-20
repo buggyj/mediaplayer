@@ -1,0 +1,104 @@
+caption: Movable List
+tags: $:/bj/templates/media
+title: $:/bj/templates/media/playWithExtraTextMovableMacro
+type: text/vnd.tiddlywiki
+
+\define currentAsTag() [[$(currentTiddler)$]]
+\define sliceOfCurrent() $(currentTiddler)$/slice
+\define join(x,y) $(joinx)$ $(joiny)$
+\define CreateTid(WithField,type)
+<$action-createtiddler $basetitle=<<sliceOfCurrent>> tags=<<currentAsTag>> _canonical_uri={{!!location}} starttime={{{[<playing>get[endtime]else[0]]}}}  endtime="00:00:00" %WithField%="" type="$type$">
+  <$action-listops $field="list" $subfilter="[<createTiddler-title>]"/>
+</$action-createtiddler>
+\end
+\define ModTid(tid)
+<$action-setfield $tiddler="$tid$" starttime={{{[<playing>get[endtime]else[0]]}}}  >
+</$action-setfield>
+\end
+\define extra(tid) <$transclude tiddler="$tid$/extra" mode="block"/>
+\define extraedit(tid) <$edit-text tiddler="$tid$/extra" class="bjeditbox"/>
+\define MakePlayer(xplayer,type,subpath)
+<$vars currentlyPlaying=<<qualify "$:/temp/">> dialogfield={{{[title[$:/bj/default/$subpath$/textfield]get[text]] +[trim[]]}}}
+currentTag={{{[<currentTag>get[title]else<currentTiddler>]}}}>
+<$msequence filter="[tag<currentTiddler>]" syntid=<<currentlyPlaying>>  mode="dynamic"  onEnd="tm-ply-next" autoStart="yes">
+
+
+<$$xplayer$ onStart="tm-mply-caught"     onEnd={{{[<currentTag>get[endaction]else[]]}}}  deltas="5.0" doLog="true">
+
+<$reveal type="match" state="$:/temp/editplaylist" text="show">
+<$button set="$:/temp/editplaylist" setTo="hide">X</$button>
+<$transclude tiddler={{{[[$:/bj/templates/media/ButtonsEditViewCustom]!is[missing]then[$:/bj/templates/media/ButtonsEditViewCustom]else[$:/bj/templates/media/ButtonsEditView]]}}}/>
+<$transclude tiddler={{{[[$:/bj/templates/media/ExtraEditCustom]!is[missing]then[$:/bj/templates/media/ExtraEditCustom]else[$:/bj/templates/media/ExtraEdit]]}}}/>
+</$reveal><$reveal type="nomatch" state="$:/temp/editplaylist" text="show">
+<$button set="$:/temp/editplaylist" setTo="show">🖊️</$button>
+</$reveal>
+{{$:/bj/buttonPause}}
+{{$:/bj/buttonPlay}}
+{{$:/bj/buttonrewind}}
+{{$:/bj/buttonfastforward}}
+{{$:/bj/buttonslower}}
+{{$:/bj/buttonfaster}}
+</$$xplayer$><div/>
+{{$:/bj/buttonup}}
+{{$:/bj/buttondown}}
+{{$:/bj/buttonloop}}
+Mode:<$select tiddler={{{[<currentTag>get[title]else<currentTiddler>]}}} field="endaction" default="">
+<option value="tm-mply-next">continuous</option>
+<option value="">stopping</option>
+</$select>
+<!--- ---editing--- --->
+<$reveal type="match" state="$:/temp/editplaylist" text="show">
+
+<h2>Control playlists order using drag and drop</h2>
+<$button>
+➕
+<$vars playing={{{[<currentlyPlaying>get[text]else[]]}}}>
+<$macrocall $name="CreateTid" WithField=<<dialogfield>> type="$type$"/>
+</$vars>
+</$button>
+
+
+<$vars currentTag=<<currentTiddler>>>
+<$taglist class="btn btn-primary" targeTtag=<<currentTiddler>>  emptyMessage="start again" noadd="true" htmltag="scan">
+<$transclude tiddler={{{[<currentTag>get[edittemplate]] +[trim[]]}}}>
+	 <$transclude tiddler={{{[title[$:/bj/default/templates/$subpath$/isEdit]get[text]] +[trim[]]}}}>
+	 no template found in $:/bj/default/templates/$subpath$/isEdit
+	 </$transclude>
+  </$transclude> 
+</$taglist>
+</$vars>
+
+
+<$vars isplaying={{{[<currentlyPlaying>get[text]]}}}>
+
+<$list filter="[title<isplaying>] +[has[title]]" >
+<$macrocall $name="extraedit" tid=<<isplaying>>/>
+</$list>
+
+</$vars>
+</$reveal>
+
+<!--- ---viewing--- --->
+<$reveal type="nomatch" state="$:/temp/editplaylist" text="show">
+<$linkcatcher message="tm-mply-move">
+
+<$vars currentTag=<<currentTiddler>>>
+<$list filter="[tag<currentTiddler>]">
+  <$transclude tiddler={{{[<currentTag>get[template]] +[trim[]]}}}>
+	 <$transclude tiddler={{{[title[$:/bj/default/templates/$subpath$/isPlay]get[text]] +[trim[]]}}}>
+	 no template found in $:/bj/default/templates/$subpath$/isPlay
+	 </$transclude>
+  </$transclude> 
+</$list>
+</$vars>
+</$linkcatcher>
+
+<$macrocall $name="extra" tid={{{[<currentlyPlaying>get[text]]}}}/>
+
+</$reveal>
+
+</$msequence>
+
+
+
+\end

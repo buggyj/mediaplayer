@@ -1,0 +1,6 @@
+caption: edit current line
+tags: $:/bj/templates/media $:/bj/templates/media/IsEdit
+title: $:/bj/templates/media/isEditLine
+type: text/vnd.tiddlywiki
+
+<$reveal state=<<currentlyPlaying>> text={{!!title}} type="nomatch"></$reveal> <$reveal state=<<currentlyPlaying>> text={{!!title}} type="match">   <$edit-text tag=textarea field={{$:/bj/default/media/textfield}}/></$reveal>

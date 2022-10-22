@@ -27,8 +27,11 @@ currentTag={{{[<currentTag>get[title]else<currentTiddler>]}}}>
 <$reveal type="match" state="$:/temp/editplaylist" text="show">
 <$button set="$:/temp/editplaylist" setTo="hide">X</$button>
 
-<$transclude tiddler={{{[[$:/bj/templates/media/ButtonsEditViewCustom]!is[missing]then[$:/bj/templates/media/ButtonsEditViewCustom]else[$:/bj/templates/media/ButtonsEditView]]}}}/>
-<$transclude tiddler={{{[[$:/bj/templates/media/ExtraEditCustom]!is[missing]then[$:/bj/templates/media/ExtraEditCustom]else[$:/bj/templates/media/ExtraEdit]]}}}/>
+<$vars ExtraEditCustom={{{[[$:/bj/templates/media/ExtraEditCustom]is[shadow]then[$:/bj/templates/media/ExtraEditCustom]else[$:/bj/templates/media/ExtraEdit]]}}} 
+ButtonsEditViewCustom={{{[[$:/bj/templates/media/ButtonsEditViewCustom]is[shadow]then[$:/bj/templates/media/ButtonsEditViewCustom]else[$:/bj/templates/media/ButtonsEditView]]}}}>
+<$transclude tiddler={{{[[$:/bj/templates/media/ButtonsEditViewCustom]!is[missing]then[$:/bj/templates/media/ButtonsEditViewCustom]else<ButtonsEditViewCustom>]}}}/>
+<$transclude tiddler={{{[[$:/bj/templates/media/ExtraEditCustom]!is[missing]then[$:/bj/templates/media/ExtraEditCustom]else<ExtraEditCustom>]}}}/>
+</$vars>
 </$reveal><$reveal type="nomatch" state="$:/temp/editplaylist" text="show">
 <$button set="$:/temp/editplaylist" setTo="show">🖊️</$button>
 </$reveal>

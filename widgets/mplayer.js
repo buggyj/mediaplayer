@@ -128,7 +128,7 @@ Compute the internal state of the widget
 MPlayerWidget.prototype.execute = function() {
 	// Get our parameters
 	this.playbackRate = parseFloat(this.getAttribute("pback",1.0));
-	this.volume = 1.0
+	this.volume = parseFloat(this.getAttribute("volume",1.0));
 	this.onStart = this.getAttribute("onStart");
 	this.onEnd = this.getAttribute("onEnd");
     this.deltas =parseFloat(this.getAttribute("deltas",10.0));
@@ -154,10 +154,14 @@ MPlayerWidget.prototype.refresh = function(changedTiddlers) {
 		this.refreshSelf();
 		return true;
 	}
-	else {
-        if(changedAttributes["onEnd"]) this.onEnd = this.getAttribute("onEnd");
-		return this.refreshChildren(changedTiddlers);
+	else if(changedAttributes["onEnd"]) {this.onEnd = this.getAttribute("onEnd");}
+	
+	else if(changedAttributes["pback"]) {
+		this.playbackRate= this.getAttribute("pback");
+		this.audiodomNode.playbackRate = this.playbackRate;
+
 	}
+	return this.refreshChildren(changedTiddlers);
 };
 
 MPlayerWidget.prototype.updater = function updater(event) {
@@ -190,6 +194,7 @@ MPlayerWidget.prototype.handleStartEvent = function(event) {
 		self.debug ("start player");
 		self.audiodomNode.addEventListener('timeupdate', self.updater.bind(self));
 		player.play();
+		player.playbackRate = self.playbackRate;
 	} 
 	{
 		additionalFields = event;
@@ -239,6 +244,7 @@ MPlayerWidget.prototype.handleStartEvent = function(event) {
 				//player.addEventListener("canplay",canlisener);
 			} 
 			player.volume =  self.volume * self.equalize;	
+			player.playbackRate = self.playbackRate;
 			if (!self.wait) player.play();
 		}
 		if (this.onStart){
@@ -312,9 +318,11 @@ MPlayerWidget.prototype.handleFFEvent = function(event) {
 	return false;//always consume event
 };
 MPlayerWidget.prototype.handleRWEvent = function(event) {
-	var player = this.audiodomNode;
+	var player = this.audiodomNode,delta;
+	//console.log("delta= "+event.paramObject.delta);
 	try {
-	player.currentTime -= this.deltas;
+	delta = event.paramObject.delta||this.deltas;
+	player.currentTime -= delta;
 	} catch(e) {};
 	return false;//always consume event
 };
@@ -331,13 +339,19 @@ MPlayerWidget.prototype.handleSupEvent = function(event) {
 };
 MPlayerWidget.prototype.handleSdwnEvent = function(event) {
 	var player = this.audiodomNode;
-	var self = this,additionalFields,track;
-	try {
-	if (this.playbackRate > 0.5) {
-		this.playbackRate -= 0.1;
-		player.playbackRate = this.playbackRate;
+	if (event.paramObject && event.paramObject.once) {
+		try {
+			player.playbackRate = this.playbackRate - event.paramObject.once;
+		} catch(e) {};
 	}
-	} catch(e) {};
+	else {
+		try {
+			if (this.playbackRate > 0.5) {
+				this.playbackRate -= 0.1;
+				player.playbackRate = this.playbackRate;
+			}
+		} catch(e) {};
+	}
 	return false;//always consume event
 };
 exports.mplayer = MPlayerWidget;

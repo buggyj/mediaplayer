@@ -23,7 +23,7 @@ currentTag={{{[<currentTag>get[title]else<currentTiddler>]}}}>
 <$msequence filter="[tag<currentTiddler>]" syntid=<<currentlyPlaying>>  mode="dynamic"  onEnd="tm-ply-next" autoStart="yes">
 
 
-<$$xplayer$ onStart="tm-mply-caught"     onEnd={{{[<currentTag>get[endaction]else[]]}}}  deltas="5.0" doLog="true">
+<$$xplayer$ onStart="tm-mply-caught"     onEnd={{{[<currentTag>get[endaction]else[]]}}}  deltas="5.0" doLog="true" pback={{$:/bj/pbackspeed}}>
 
 <$reveal type="match" state="$:/temp/editplaylist" text="show">
 <$button set="$:/temp/editplaylist" setTo="hide">X</$button>

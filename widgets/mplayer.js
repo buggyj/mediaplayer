@@ -245,7 +245,7 @@ MPlayerWidget.prototype.handleStartEvent = function(event) {
 			} 
 			player.volume =  self.volume * self.equalize;	
 			player.playbackRate = self.playbackRate;
-			if (!self.wait) player.play();
+			if (!self.wait) self.play();
 		}
 		if (this.onStart){
 			this.dispatchEvent({
@@ -273,7 +273,7 @@ MPlayerWidget.prototype.handlePlayEvent = function(event) {
 	try {	
 	if (player.paused) {
 		this.debug ("mplayer start play ");
-		player.play();
+		this.play();
 	}
     } catch(e) {this.debug ("mplayer start fail");};
 	return false;//always consume event
@@ -287,6 +287,15 @@ MPlayerWidget.prototype.handlePauseEvent = function(event) {
 	} catch(e) {};
 	return false;//always consume event
 };
+
+MPlayerWidget.prototype.play =function () {
+	var player = this.audiodomNode;
+	var pPromise = player.play();
+
+	if (pPromise !== undefined) {
+		pPromise.then(_ => {}).catch(error => {console.log("mplayer start fail"); });
+	}
+}
 
 MPlayerWidget.prototype.handleVolUpEvent = function(event) {
 	var player = this.audiodomNode;

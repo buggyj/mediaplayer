@@ -6,10 +6,15 @@ type: text/vnd.tiddlywiki
 \define currentAsTag() [[$(currentTiddler)$]]
 \define sliceOfCurrent() $(currentTiddler)$/slice
 \define join(x,y) $(joinx)$ $(joiny)$
-\define CreateTid(WithField,type)
-<$action-createtiddler $basetitle=<<sliceOfCurrent>> tags=<<currentAsTag>> _canonical_uri={{!!location}} starttime={{{[<playing>get[endtime]else[0]]}}}  endtime="00:00:00" %WithField%="" type="$type$">
+\define CreateTid(type)
+<$action-createtiddler $basetitle=<<sliceOfCurrent>> tags=<<currentAsTag>> _canonical_uri={{!!location}} starttime={{{[<playing>get[endtime]else[0]]}}}  endtime="00:00:00" type="$type$">
   <$action-listops $field="list" $subfilter="[<createTiddler-title>]"/>
 </$action-createtiddler>
+\end
+\define CreateTidRestart(type)
+<$action-createtiddler $basetitle=<<sliceOfCurrent>> tags=<<currentAsTag>> _canonical_uri={{!!location}} starttime={{{[<playing>get[endtime]else[0]]}}}  endtime="00:00:00"  type="$type$">
+  <$action-listops $field="list" $subfilter="[<createTiddler-title>]"/>
+</$action-createtiddler><$action-sendmessage $message="tm-mply-restart" />
 \end
 \define ModTid(tid)
 <$action-setfield $tiddler="$tid$" starttime={{{[<playing>get[endtime]else[0]]}}}  >
@@ -39,7 +44,7 @@ ButtonsEditViewCustom={{{[[$:/bj/templates/media/ButtonsEditViewCustom]is[shadow
 {{$:/bj/buttonfastforward}}
 {{$:/bj/buttonslower}}
 {{$:/bj/buttonfaster}}
-</$$xplayer$><div/>
+<div/>
 <$reveal type="nomatch" state="$:/temp/editplaylist" text="show">
 <$button set="$:/temp/editplaylist" setTo="show">🖊️</$button>
 </$reveal>
@@ -57,7 +62,7 @@ Mode:<$select tiddler={{{[<currentTag>get[title]else<currentTiddler>]}}} field="
 <$button>
 ➕
 <$vars playing={{{[<currentlyPlaying>get[text]else[]]}}}>
-<$macrocall $name="CreateTid" WithField=<<dialogfield>> type="$type$"/>
+<$macrocall $name="CreateTid" type="$type$"/>
 </$vars>
 </$button>
 
@@ -99,6 +104,17 @@ Mode:<$select tiddler={{{[<currentTag>get[title]else<currentTiddler>]}}} field="
 
 <$macrocall $name="extra" tid={{{[<currentlyPlaying>get[text]]}}}/>
 
+</$reveal>
+</$$xplayer$>
+<$reveal type="match" state="$:/temp/editplaylist" text="show">
+<$list filter={{{[all[tiddlers]tag<currentTiddler>then[]else[x]]}}} variable="null" >
+<$button>
+➕
+<$vars playing={{{[<currentlyPlaying>get[text]else[]]}}}>
+<$macrocall $name="CreateTidRestart" type="$type$"/>
+</$vars>
+</$button>
+</$list>
 </$reveal>
 
 </$msequence>

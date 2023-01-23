@@ -3,6 +3,7 @@
 	"description": "media player templates",
 	"author": "JeffreyWilkinson",
 	"version": "2.0.2",
+	"name":"bj's media player templates",
 	"list": "license readme",
 	"core-version": ">=5.2.0",
 	"source": "none",

@@ -2,9 +2,6 @@ title: $:/bj/templates/isPlayingBasic
 type: text/vnd.tiddlywiki
 
 
-<$reveal state=<<currentlyPlaying>> text={{!!title}} type="nomatch">
-<$link><span class="tc-taglistplain"><$view field="title"/></span></$link>
-</$reveal>
-<$reveal state=<<currentlyPlaying>> text={{!!title}} type="match">
-<$link><span class="tc-taglist"><$view field="title"/></span></$link></$reveal>
+<$reveal state=<<currentlyPlaying>> text={{!!title}} type="nomatch"><$link><span class="tc-taglistplain"><$transclude field="summary"><$view field="title"/></$transclude></span></$link></$reveal>
+<$reveal state=<<currentlyPlaying>> text={{!!title}} type="match"><$link><span class="tc-taglist"><$transclude field="summary"><$view field="title"/></$transclude></span></$link></$reveal>
 <br>

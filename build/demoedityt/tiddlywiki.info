@@ -1,0 +1,13 @@
+{
+	"plugins": [
+		"tiddlywiki/tiddlyweb",
+		"tiddlywiki/filesystem",
+		"bj/mediaplayer/ytwidgets"
+	],
+	"includeWikis": [
+		"../demo"
+	],
+	"config": {
+		"default-tiddler-location": "../demo/tiddlers"
+	}
+}

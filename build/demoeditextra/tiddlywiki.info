@@ -1,0 +1,13 @@
+{
+	"plugins": [
+		"bj/mediaplayer","bj/mediaplayer/ytannotations"
+	],
+	"themes": [
+		"tiddlywiki/vanilla",
+		"tiddlywiki/snowwhite"
+	],
+		"doNotSave": [
+	],
+	"includeWikis": [
+	]
+}

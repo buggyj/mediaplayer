@@ -389,6 +389,6 @@ YTWidget.prototype.doActions = function(triggeringWidget,event) {
 	}
 	return;
 };
-exports.ytplayer = YTWidget;
+exports.ytplayerold = YTWidget;
 
 })();

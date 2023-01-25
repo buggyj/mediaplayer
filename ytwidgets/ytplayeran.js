@@ -71,7 +71,7 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 		height: 1,//this.height,
 		width: 1,//this.width,
 		
-		playerVars: {'autoplay': 0,  'controls': 0},
+		playerVars: {'autoplay': 0,  'controls': 1},
 		events: {
 		  'onReady':  function (event) {
 			 // alert("ready");
@@ -239,14 +239,17 @@ YTrawWidget.prototype.handleStartEvent = function(event) {
 			}
 			else self.src ="";
 		}
-		if (tid.fields["yt-start"]) {
+		self.start = tid.fields["starttime"]||tid.fields["yt-start"]||0;
+		self.end   = tid.fields["endtime"]  ||tid.fields["yt-end"]  ||1000000;
+		if (self.end === 0) self.end = 1000000; 
+		/*if (tid.fields["yt-start"]) {
 			self.start = tid.fields["yt-start"];
 			debug ("has starttime " +self.start);
-		} else self.start = null;
+		} else self.start = 0;
 		if (tid.fields["yt-end"]) {
 			self.end = tid.fields["yt-end"];
 			debug ("has endtime " +self.end);
-		}else self.end = null;
+		}else self.end = 1000000;*/
 		self.equalize = tid.fields.equalize || 1.0;
 		debug ("has equ " +self.equalize);
 		
@@ -477,5 +480,5 @@ YTWidget.prototype.doActions = function(triggeringWidget,event) {
 	return;
 };
 exports.ytplayeran = YTWidget;
-
+exports.ytplayer = YTWidget;
 })();

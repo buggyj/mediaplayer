@@ -2,7 +2,8 @@ title: $:/bj/templates/currentList
 type: text/vnd.tiddlywiki
 
 <$reveal state=<<currentPlayList>> text={{!!title}} type="nomatch"><$fieldmangler><$button  param= <<currentTag>> message="tm-remove-tag" class="tc-btn-invisible">{{$:/core/images/cancel-button}}</$button></$fieldmangler>
-<$link><span class="tc-taglistplain"><$view field="title"/></span></$link>
+<$link><span class="tc-taglistplain"><$view field="caption"><$view field="title"/></$view></span></$link>
 </$reveal>
 <$reveal state=<<currentPlayList>> text={{!!title}} type="match"><$fieldmangler><$button  param= <<currentTag>> message="tm-remove-tag" class="tc-btn-invisible">{{$:/core/images/cancel-button}}</$button></$fieldmangler>
-<$link><span class="tc-taglist"><$view field="title"/></span></$link></$reveal>
+<$link><span class="tc-taglist"><$view field="caption"><$view field="title"/></$view></span></$link></$reveal>
+

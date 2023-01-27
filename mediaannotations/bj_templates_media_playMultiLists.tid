@@ -3,33 +3,16 @@ tags: $:/bj/templates/ListTop $:/bj/templates/media
 title: $:/bj/templates/media/playMultiLists
 type: text/vnd.tiddlywiki
 
-\define extra()
-<$transclude tiddler="$(current)$/text" mode="block"/>
-\end
-
-\define MakeTemplate(tmpl:{{||$:/bj/templates/playList}}) $tmpl$
-
-\define content(syntid)
-<$vars currentTiddler={{$syntid$}}>
-<$list filter="[<currentTiddler>tag<currentTag>get[title]]" variable="notused" >
-<$macrocall $name ="MakeTemplate" tmpl={{{[all[current]get[text]]}}}/>
-</$list>
-</$vars>
-\end
 <details><summary>newname</summary><$edit-text tiddler="$:/temp/bj/caption" default="" tag=input/>
 <$button>➕<$vars playing={{{[<currentPlayList>get[text]else[]]}}}><$action-createtiddler $basetitle=<<currentTiddler>> tags=<<currentTiddler>> location={{!!location}} endaction="tm-mply-next"  text="{{||$:/bj/templates/media/gettemplate}}" caption={{$:/temp/bj/caption}}></$action-createtiddler></$vars><$action-deletetiddler $tiddler="$:/temp/bj/caption"/></$button></details>
+
 !!Control list of Playlists using drag and drop
 <$vars currentPlayList=<<qualify "$:/temp/">> currentTag=<<currentTiddler>>>
 <$playlist filter="[tag<currentTiddler>]" syntid=<<currentPlayList>>  mode="dynamic">
 <$ondrop targeTtag=<<currentTiddler>> tagAction="addtag" >
-<$button> 
-<$action-sendmessage $message="tm-ply-prev" />
-⏮️
-</$button>
-<$button>
-<$action-sendmessage $message="tm-ply-next" />
-⏭️
-</$button>
+{{$:/bj/buttonprevlist}}
+{{$:/bj/buttonnextlist}}
+
 <$linkcatcher message="tm-ply-move">
 
 <$taglist class="btn btn-primary" targeTtag=<<currentTiddler>> template="$:/bj/templates/media/currentListCaption" emptyMessage="drop playlist here"></$taglist>
@@ -37,7 +20,19 @@ type: text/vnd.tiddlywiki
 </$linkcatcher>
 </$ondrop>
 
-<$macrocall $name=content syntid=<<currentPlayList>>/>
+<!--- current playlist, use a list to set current tiddler and transclude--->
+
+<$vars currentTiddler={{{[<currentPlayList>get[text]]}}}>
+   <$list filter="[<currentTiddler>tag<currentTag>get[title]]" variable="notused" >
+   <$transclude tiddler={{{[all[current]get[text]] +[trim[]removeprefix[{{||]removesuffix[}}]]}}}>
+      <$transclude tiddler={{{[all[current]get[text]] +[trim[]]}}}>
+         <$transclude tiddler={{{[title[$:/bj/default/templates/playList]get[text]] +[trim[]]}}}>
+         no template found in $:/bj/default/templates/playList
+         </$transclude>
+      </$transclude> 
+   </$transclude>
+   </$list>
+</$vars>
 
 </$playlist>
 

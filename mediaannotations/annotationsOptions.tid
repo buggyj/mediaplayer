@@ -1,0 +1,24 @@
+title: annotationsOptions
+type: text/vnd.tiddlywiki
+
+`Edit`<$select tiddler="$:/bj/default/templates/media/isEdit" default='$:/bj/templates/isNewEditAVText'>
+<$list filter='[all[shadows+tiddlers]tag[$:/bj/templates/media/IsEdit]sort[title]]'>
+<option value=<<currentTiddler>>><$view field='caption'><$view field='title'/></$view></option>
+</$list>
+</$select>
+
+----
+`View`<$select tiddler="$:/bj/default/templates/media/isPlay" default='$:/bj/templates/isPlayingAVextra2'>
+<$list filter='[all[shadows+tiddlers]tag[$:/bj/templates/media/IsPlay]sort[title]]'>
+<option value=<<currentTiddler>>><$view field='caption'><$view field='title'/></$view></option>
+</$list>
+</$select>
+
+----
+`List`<$select tiddler="$:/bj/default/templates/media/PlayWith" default='$:/bj/templates/media/playWithExtraText'>
+<$list filter='[all[shadows+tiddlers]tag[$:/bj/templates/media/ListTemplate]sort[title]]'>
+<option value=<<currentTiddler>>><$view field='caption'><$view field='title'/></$view></option>
+</$list>
+</$select>
+
+

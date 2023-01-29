@@ -104,16 +104,20 @@ Mode:<$select tiddler={{{[<currentTag>get[title]else<currentTiddler>]}}} field="
 
 </$reveal>
 </$$xplayer$>
-<$reveal type="match" state="$:/temp/editplaylist" text="show">
 <$list filter={{{[all[tiddlers]tag<currentTiddler>then[]else[x]]}}} variable="null" >
+<$reveal type="match" state="$:/temp/editplaylist" text="show">
 <$button>
 ➕
 <$vars playing={{{[<currentlyPlaying>get[text]else[]]}}}>
 <$macrocall $name="CreateTidRestart" type="$type$"/>
 </$vars>
 </$button>
-</$list>
 </$reveal>
+<$reveal type="nomatch" state="$:/temp/editplaylist" text="show">
+<$button set="$:/temp/editplaylist" setTo="show">🖊️</$button>
+</$reveal>
+</$list>
+
 
 </$msequence>
 

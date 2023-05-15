@@ -10,7 +10,7 @@ module-type: widget
 /*global $tw: false */
 "use strict";
 
-var modname = "toggle";
+var modname = "bj-toggle";
 
 //-------this block enables the default params values and name change --------
 // *** add this var above changing to you 'default external name for the widget

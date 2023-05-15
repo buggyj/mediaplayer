@@ -1,9 +1,9 @@
 title: $:/bj/buttonloop
 type: text/vnd.tiddlywiki
 
-<$toggle name="loopcntrl" primeValue="$:/bj/buttonIconLoop" altValue="$:/bj/buttonIconStraight">
+<$bj-toggle name="loopcntrl" primeValue="$:/bj/buttonIconLoop" altValue="$:/bj/buttonIconStraight">
 <$button>
    <$transclude tiddler=<<loopcntrl>>/>
    <$action-sendmessage $message="bjm-toggle" />
 </$button>
-</$toggle>
+</$bj-toggle>

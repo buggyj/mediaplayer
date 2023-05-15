@@ -220,7 +220,7 @@ MPlayerWidget.prototype.handleStartEvent = function(event) {
 
 	}
 	try {
-		if (player.src != track){
+		if (decodeURI(player.src) != decodeURI(track)){
 			player.src = track;//if playtime <= 0 play till end
 			player.controls ="controls";
 			

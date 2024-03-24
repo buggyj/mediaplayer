@@ -1,0 +1,28 @@
+title: $:/bj/yt/playtemplate
+type: text/vnd.tiddlywiki
+
+\define ytm(t) <$button class="tc-btn-invisible"><$action-sendmessage $message="tm-mgoto" time="$t$"/>$t$</$button>
+\define annotations()
+
+ <$macrocall $name=xTimeStamps text={{$(currentTiddler)$/annotations}} format='<<ytm "$1">>'/>
+
+\end
+<$vars whenready={{$:/temp/ytplayerready}}>
+<$msequence filter="[title<currentTiddler>]"   autoStart="yes">
+
+<$ytplayer onEnd="tm-mply-next" onStart="tm-mply-caught"  deltas="5.0" >
+
+{{$:/bj/buttonrewind}}{{$:/bj/buttonfastforward}}
+
+<<annotations>>
+
+</$ytplayer>
+</$msequence>
+</$vars>
+
+
+
+
+
+
+

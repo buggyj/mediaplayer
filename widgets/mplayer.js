@@ -33,6 +33,7 @@ var Widget = require("$:/core/modules/widgets/widget.js").widget;
 var MPlayerWidget = function(parseTreeNode,options) {
 	this.initialise(parseTreeNode,options);
 	this.addEventListeners([
+	{type: "tm-mgoto", handler: "handleGoToEvent"},
 	{type: "tm-mff", handler: "handleFFEvent"},
 	{type: "tm-mrw", handler: "handleRWEvent"},
 	{type: "tm-mstop", handler: "handleStopEvent"},
@@ -296,7 +297,15 @@ MPlayerWidget.prototype.play =function () {
 		pPromise.then(_ => {}).catch(error => {console.log("mplayer start fail"); });
 	}
 }
-
+MPlayerWidget.prototype.handleGoToEvent = function(event) {
+	var player = this.audiodomNode,time;
+	//console.log("delta= "+event.paramObject.delta);
+	try {
+		time = event.paramObject.time||this.beginTime;
+	player.currentTime = time;
+	} catch(e) {};
+	return false;//always consume event
+};
 MPlayerWidget.prototype.handleVolUpEvent = function(event) {
 	var player = this.audiodomNode;
 	var self = this,additionalFields,track;

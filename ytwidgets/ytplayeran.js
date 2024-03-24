@@ -20,6 +20,7 @@ var Widget = require("$:/core/modules/widgets/widget.js").widget;
 var YTrawWidget = function(parseTreeNode,options) {
 	this.initialise(parseTreeNode,options);
 	this.addEventListeners([
+	{type: "tm-mgoto", handler: "handleGoToEvent"},
 	{type: "tm-mff", handler: "handleFFEvent"},
 	{type: "tm-mrw", handler: "handleRWEvent"},
 	{type: "tm-mstop", handler: "handleStopEvent"},
@@ -401,8 +402,23 @@ YTrawWidget.prototype.handleRWEvent = function(event) {
 	} catch(e) {};
 	return false;//always consume event
 };
+YTrawWidget.prototype.handleGoToEvent = function(event) {
+	var player = this.player,time;
+	try {
+		time = event.paramObject.time||this.start;
+		time = toTime(time);
+		player.seekTo(time, true);
+	} catch(e) {};
+	return false;//always consume event
+};
 exports.ytrawplayer = YTrawWidget;
 
+function toTime (time) {
+var hms = time.split(":");
+if (hms.length === 1) return time*1;
+if (hms.length === 2) return ((hms[0]*60) +(hms[1]*1));
+if (hms.length === 3) return ((((hms[0]*60) +(hms[1]*1))*60) + (hms[2]*1));
+};
 //----------------------------------------------
 
 var YTWidget = function(parseTreeNode,options) {

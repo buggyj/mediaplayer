@@ -4,7 +4,7 @@
 	"name":"media player base",
 	"plugin-priority": "2",
 	"author": "JeffreyWilkinson",
-	"version": "2.0.11",
+	"version": "2.0.12",
 	"list": "license readme",
 	"core-version": ">=5.2.0",
 	"source": "https://github.com/buggyj/mediaplayer",

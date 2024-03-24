@@ -103,6 +103,7 @@ MPlayListWidget.prototype.updatelist = function() {
 }
 
 MPlayListWidget.prototype.settid = function(i){
+	if (!this.syntid) return;
 	this.wiki.setTextReference(this.syntid,this.list[i],this.getVariable("currentTiddler"));
 					
 	if (this.syntid.substring(0,17) === "$:/temp/__priv__/") {

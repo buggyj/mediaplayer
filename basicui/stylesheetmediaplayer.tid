@@ -3,7 +3,7 @@ title: $:/bj/stylesheets/mediaplayer
 type: text/plain
 
 .tc-taglist { 
-   background-color    : #DDB0DD; 
+   background-color    :orange; 
      -webkit-border-top-left-radius: 0.3em;
      -webkit-border-bottom-left-radius: 0.3em;
      -moz-border-radius-topleft: 0.3em;
@@ -20,11 +20,14 @@ width:100%;
 
 }
 
+.tc-underline {
+  text-decoration: underline;
+}
 .tc-taglist:dragover {
     background: red;
 }
 .tc-taglist:hover {
-     background-color: yellow;
+     background-color: grey;
 }
 
 .tc-taglistplain { 
@@ -49,5 +52,5 @@ width:100%;
     background: red;
 }
 .tc-taglistplain:hover {
-     background-color: yellow;
+     background-color: lightgrey;
 }

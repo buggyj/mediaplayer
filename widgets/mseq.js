@@ -24,7 +24,8 @@ var MPlayListWidget = function(parseTreeNode,options) {
 	{type: "tm-mply-next", handler: "handleNextEvent"},
 	{type: "tm-mply-move", handler: "handleMoveEvent"},
 	{type: "tm-mply-caught", handler: "handleCaughtEvent"},
-	{type: "tm-mply-prev", handler: "handlePrevEvent"}]);
+	{type: "tm-mply-prev", handler: "handlePrevEvent"},
+	{type: "tm-mply-replay", handler: "handleRePlay"}])
 };
 /*
 Inherit from the base widget class
@@ -48,10 +49,11 @@ Compute the internal state of the widget
 MPlayListWidget.prototype.execute = function() {
 	// Compose the list elements
 	this.list = this.getTiddlerList();
-	this.sticky = false;
+	this.sticky =("false"==this.getAttribute("loop","false"))?false:true;
 	this.n =-1;
 	this.autoStart = this.getAttribute("autoStart")
 	this.onEnd = this.getAttribute("onEnd");
+	this.onEmpty = this.getAttribute("onEmpty");
 	this.final  = this.getAttribute("final");
 	this.onEndParam = this.getAttribute("onEndParam");
     this.syntid = this.getAttribute("syntid");
@@ -100,11 +102,11 @@ MPlayListWidget.prototype.updatelist = function() {
 	if (i === list.length) i = 0;
 	this.n = i;
 	this.list = list;
+	debug("updated list len "+list.length);
 }
 
 MPlayListWidget.prototype.settid = function(i){
-	if (!this.syntid) return;
-	this.wiki.setTextReference(this.syntid,this.list[i],this.getVariable("currentTiddler"));
+	if (!this.syntid) return;	this.wiki.setTextReference(this.syntid,this.list[i],this.getVariable("currentTiddler"));
 					
 	if (this.syntid.substring(0,17) === "$:/temp/__priv__/") {
 		this.dispatchEvent({
@@ -115,10 +117,13 @@ MPlayListWidget.prototype.settid = function(i){
 }
 	
 MPlayListWidget.prototype.doMove = function(loc) {
-	debug ("doMove "+this.n);
+	debug (this.list.length +"doMove "+this.n);
 	if (this.mode == "dynamic") this.updatelist();
 	if(this.list.length === 0) {
-		//do nothing
+		if (this.onEmpty){
+			this.dispatchEvent({type: this.onEmpty});
+		}
+
 	} else {
 		var tid,i;
 		for (i = 0; i < this.list.length; i++) {
@@ -139,11 +144,14 @@ MPlayListWidget.prototype.doMove = function(loc) {
 	}
 }
 MPlayListWidget.prototype.doStart = function() {
-	debug ("doStart "+this.n);
+	debug (this.list.length + "doStart "+this.n);
 	if (this.mode == "dynamic") this.updatelist();
 	this.n = -1;
 	if(this.list.length === 0) {
-		//do nothing
+		if (this.onEmpty){
+			this.dispatchEvent({type: this.onEmpty});
+		}
+
 	} else {
 		var tid,i;
 			if ((this.onEnd) && (this.n == this.list.length -1)){debug("onend "+this.n);
@@ -184,10 +192,12 @@ MPlayListWidget.prototype.doStart = function() {
 }
 
 MPlayListWidget.prototype.doNext = function() {
-	debug ("doNext "+this.n);
+	debug (this.list.length + "doNext "+this.n);
 	if (this.mode == "dynamic") this.updatelist();
 	if(this.list.length === 0) {
-		//do nothing
+		if (this.onEmpty){
+			this.dispatchEvent({type: this.onEmpty});
+		}
 	} else {
 		var tid,i;
 		if ((this.onEnd) && (this.n == this.list.length -1)){
@@ -225,10 +235,12 @@ MPlayListWidget.prototype.doNext = function() {
 	}
 }
 MPlayListWidget.prototype.doPrev = function() {
-	debug ("doPrev "+this.n);
+	debug (this.list.length + "doPrev "+this.n);
 	if (this.mode == "dynamic") this.updatelist();
 	if(this.list.length === 0) {
-		//do nothing
+		if (this.onEmpty){
+			this.dispatchEvent({type: this.onEmpty});
+		}
 	} else {
 		var tid,i;
 		
@@ -251,10 +263,12 @@ MPlayListWidget.prototype.doPrev = function() {
 }
 
 MPlayListWidget.prototype.doAgain = function() {
-	debug ("doAgain "+this.n);	
+	debug (this.list.length +"doAgain "+this.n);	
 	if (this.mode == "dynamic") this.updatelist();
 	if(this.list.length === 0) {
-		//do nothing
+		if (this.onEmpty){
+			this.dispatchEvent({type: this.onEmpty});
+		}
 	} else {
 		var tid,i;
 		
@@ -285,10 +299,18 @@ MPlayListWidget.prototype.handleReStart = function(event) {
 	this.doStart();
 	return false; // dont propegate
 }
+
+MPlayListWidget.prototype.handleRePlay = function(event) {
+		// Check for an empty list
+	this.doAgain();
+	return false; // dont propegate
+}
 MPlayListWidget.prototype.handleNextEvent = function(event) {
 
     if (this.mode == "dynamic") this.updatelist();
-	if (this.sticky && this.n==(this.list.length-1)) this.doStart();
+	if (this.sticky && this.n==(this.list.length-1)) { 
+if (this.mode == "restartupdate") this.updatelist();
+ this.doStart();}
 	else this.doNext();
 	return false; // dont propegate
 }

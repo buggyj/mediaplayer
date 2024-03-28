@@ -1,5 +1,5 @@
 /*\
-title: $:/bj/modules/widgets/ytplayeran.js
+title: $:/bj/modules/widgets/ytplayer.js
 type: application/javascript
 module-type: widget
 

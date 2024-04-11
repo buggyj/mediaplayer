@@ -47,25 +47,18 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 	this.started=false;
 	this.currentplayer = false;
 	this.pNode = this.document.createElement("div");
-	this.audiodomNode = this.document.createElement("div");
-	this.audiodomNode.id = 'player'+newid;
+	this.ytNode = this.document.createElement("div");
+	this.ytNode.id = 'player'+newid;
 	this.timer=false;
-	this.pInnerNode = this.document.createElement("div");
-	this.pNode.appendChild(this.pInnerNode);	
-	this.pInnerNode.appendChild(this.audiodomNode);	
+	this.pNode.appendChild(this.ytNode);	
 	this.cNode = this.document.createElement("div");
-	this.coverNode = this.document.createElement("div");
-	this.pInnerNode.appendChild(this.coverNode);	
 	this.pNode.appendChild(this.cNode);
 	// Insert element
 	parent.insertBefore(this.pNode,nextSibling);
 		this.renderChildren(this.cNode,null);
 	this.domNodes.push(this.pNode);
-	
-	this.pInnerNode.setAttribute("style","position: relative;");
-	this.coverNode.setAttribute("style","");
+
 	 
-	this.cNode.setAttribute("hidden","true");
     this.cNode.setAttribute("class","cno1");	
     this.pNode.setAttribute("class","pno1");
 	this.player = new YT.Player('player'+newid, {
@@ -228,7 +221,6 @@ YTrawWidget.prototype.handleStartEvent = function(event) {
 	var self = this,additionalFields,tid;
 	var current = this.src;debug("currenttrack "+current);
 	var currenttime=player.getCurrentTime?player.getCurrentTime():0;debug("currenttime "+currenttime);
-	this.coverNode.setAttribute("style","");
 	additionalFields = event;
 	if ((tid = this.wiki.getTiddler(additionalFields.tiddler)) && !!(tid.fields["_canonical_uri"])) {
 		if (tid.fields["yt-id"]) self.src = tid.fields["yt-id"];
@@ -275,10 +267,10 @@ YTrawWidget.prototype.handleStartEvent = function(event) {
 					if (self.start) parms.startSeconds= parseInt(self.start);
 					//if (self.end) parms.endSeconds  =parseInt(self.end);
 					if (self.src) parms.videoId  =self.src ;
-					player.loadVideoById(parms);
-					/*//self.player.pauseVideo();
+					//player.loadVideoById(parms);
+					//self.player.pauseVideo();
 					self.player.seekTo(0.01+parseInt(self.start));debug("seekto "+self.start);
-					self.player.playVideo();
+					/*self.player.playVideo();
 					setTimeout(updateTime, 1000);
 							  function updateTime() {
 								if (self.player.getCurrentTime()>self.end){
@@ -298,7 +290,8 @@ YTrawWidget.prototype.handleStartEvent = function(event) {
 				if (!self.timer) 
 				setTimeout(
 					function updateTime() {
-						if (self.player.getCurrentTime()>self.end){
+						var delta = self.end-self.player.getCurrentTime();
+						if (delta < 0 && (delta > -1)){
 								debug (self.end+" api time pause3 "+self.player.getCurrentTime());
 								 //self.player.pauseVideo();
 								 self.timer=false;
@@ -337,7 +330,6 @@ YTrawWidget.prototype.show = function() {
 	}
 YTrawWidget.prototype.handleStopEvent = function(event) {
 	var player = this.player;
-	this.coverNode.setAttribute("style","position: absolute;  top: 0;  bottom:0;  right:0;  left:0;  z-index:1000;");
 	try {
 	player.stopVideo();
 	debug("stopped at"+this.player.getCurrentTime().toString())

@@ -1,0 +1,30 @@
+caption: {{$:/language/Search/DefaultResults/Caption}}
+first-search-filter: [!is[system]search:title<userInput>sort[title]limit[250]] +[tag[annotations]]
+second-search-filter: [!is[system]search<userInput>sort[title]limit[250]] +[tag[annotations]]
+title: $:/bj/yt/searchbarboxResults
+type: text/vnd.tiddlywiki
+
+\define searchResultList()
+\whitespace trim
+//<small>{{$:/language/Search/Matches/Title}}</small>//
+
+<$list filter="[<userInput>minlength[1]]" variable="ignore">
+<$list filter="[!is[system]search:title<userInput>sort[title]limit[250]] +[tag<notestag>]">
+<span class={{{[<currentTiddler>addsuffix[-primaryList]] -[<searchListState>get[text]] +[then[]else[tc-list-item-selected]] }}}>
+<$transclude tiddler="$:/bj/yt/searchitem"/>
+</span>
+</$list>
+</$list>
+
+//<small>{{$:/language/Search/Matches/All}}</small>//
+
+<$list filter="[<userInput>minlength[1]]" variable="ignore">
+<$list filter="[!is[system]search<userInput>sort[title]limit[250]] +[tag<notestag>]">
+<span class={{{[<currentTiddler>addsuffix[-secondaryList]] -[<searchListState>get[text]] +[then[]else[tc-list-item-selected]] }}}>
+<$transclude tiddler="$:/bj/yt/searchitem"/>
+</span>
+</$list>
+</$list>
+
+\end
+<<searchResultList>>

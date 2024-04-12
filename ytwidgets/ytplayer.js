@@ -81,6 +81,7 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 							self.timer=true;
 							 setTimeout(updateTime, 300);
 							  function updateTime() {
+								try {self.setVariable("playertime",(self.player.getCurrentTime()).toString());} catch(e) {}
 								if (self.player.getCurrentTime()>self.end){
 										debug (self.end+" api time pause "+event.target.getCurrentTime());
 										self.timer=false;

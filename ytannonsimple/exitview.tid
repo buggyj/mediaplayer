@@ -1,0 +1,4 @@
+title: $:/bj/yt/exitview
+type: text/vnd.tiddlywiki
+
+<$button set="$:/layout" setTo="$:/core/ui/PageTemplate"> [x]</$button>

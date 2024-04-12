@@ -1,0 +1,4 @@
+title: $:/bj/yt/searchitem
+type: text/vnd.tiddlywiki
+
+<div class="tc-menu-list-item"><$link to=`${[<currentTiddler>split[/]first[]]}$`/></div>

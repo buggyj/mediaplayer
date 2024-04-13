@@ -299,9 +299,9 @@ MPlayerWidget.prototype.play =function () {
 }
 MPlayerWidget.prototype.handleGoToEvent = function(event) {
 	var player = this.audiodomNode,time;
-	//console.log("delta= "+event.paramObject.delta);
+	//console.log("delta= "+event.paramObject.time);
 	try {
-		time = event.paramObject.time||this.beginTime;
+		time = tosec(event.paramObject.time||this.beginTime);
 	player.currentTime = time;
 	} catch(e) {};
 	return false;//always consume event

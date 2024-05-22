@@ -184,6 +184,10 @@ MPlayerWidget.prototype.updater = function updater(event) {
 		}		
 	};
 
+function subAddrs (address, shortaddr) {
+    return address.endsWith(shortaddr);
+}
+
 MPlayerWidget.prototype.handleStartEvent = function(event) {
 	var player = this.audiodomNode;
 	var self = this,additionalFields,track,tid;
@@ -221,7 +225,8 @@ MPlayerWidget.prototype.handleStartEvent = function(event) {
 
 	}
 	try {
-		if (decodeURI(player.src) != decodeURI(track)){
+		this.debug(player.src +"?="+ track);
+		if (!subAddrs(player.src,track)){// I am unsure if I need to decodeURI() the addresses
 			player.src = track;//if playtime <= 0 play till end
 			player.controls ="controls";
 			

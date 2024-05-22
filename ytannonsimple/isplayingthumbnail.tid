@@ -1,4 +1,4 @@
-title: $:/bj/yt/ytlayout
+title: $/bj/yt/templates/isPlayingThumbNail
 type: text/vnd.tiddlywiki
 
 \define ytm(t) <$button class="tc-tiddlylink tc-btn-invisible"><$action-sendmessage $message="tm-mgoto" time="$t$"/>$t$</$button>

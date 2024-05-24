@@ -134,6 +134,7 @@ MPlayerWidget.prototype.execute = function() {
 	this.onEnd = this.getAttribute("onEnd");
     this.deltas =parseFloat(this.getAttribute("deltas",10.0));
     this.startTime =this.getAttribute("startTime",0.0);
+    this.offset =this.getAttribute("offset",0.0);
     this.endTime =this.getAttribute("endTime",-1);    
     this.display =this.getAttribute("display","yes");
     this.durationTime = this.getAttribute("durationTime",100000);
@@ -214,6 +215,7 @@ MPlayerWidget.prototype.handleStartEvent = function(event) {
 			//important when values set in widget override those in tid
 			self.beginTime = self.important?tosec(self.startTime):tosec(tid.fields.starttime || self.startTime);//note case of letters
 			self.stopTime =   self.important?tosec(self.endTime)  :tosec(tid.fields.endtime   || self.endTime);
+			self.beginTime+=self.offset;
 			if (self.stopTime > 0) {
 				self.playTime = self.stopTime - self.beginTime;
 			} else {

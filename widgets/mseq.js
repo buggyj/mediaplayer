@@ -51,6 +51,7 @@ MPlayListWidget.prototype.execute = function() {
 	this.list = this.getTiddlerList();
 	this.sticky =("false"==this.getAttribute("loop","false"))?false:true;
 	this.n =-1;
+	this.delay = parseInt(this.getAttribute("delay","0"))*1000;
 	this.autoStart = this.getAttribute("autoStart")
 	this.onEnd = this.getAttribute("onEnd");
 	this.onEmpty = this.getAttribute("onEmpty");
@@ -306,12 +307,21 @@ MPlayListWidget.prototype.handleRePlay = function(event) {
 	return false; // dont propegate
 }
 MPlayListWidget.prototype.handleNextEvent = function(event) {
-
-    if (this.mode == "dynamic") this.updatelist();
-	if (this.sticky && this.n==(this.list.length-1)) { 
-if (this.mode == "restartupdate") this.updatelist();
- this.doStart();}
-	else this.doNext();
+    var self = this;
+    if (this.delay > 0) {
+    setTimeout(	function (){	// Check for an empty list
+		if (self.mode == "dynamic") self.updatelist();
+		if (self.sticky && self.n==(self.list.length-1)) self.doStart();
+		else self.doNext();
+		},this.delay);			
+	} else {  
+		if (this.mode == "dynamic") this.updatelist();
+		if (this.sticky && this.n==(this.list.length-1)) { 
+			if (this.mode == "restartupdate") this.updatelist();
+			this.doStart();
+		}
+		else this.doNext();
+	}
 	return false; // dont propegate
 }
 MPlayListWidget.prototype.handleForceNext = function(event) {

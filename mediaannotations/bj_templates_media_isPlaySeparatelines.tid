@@ -3,6 +3,8 @@ tags: $:/bj/templates/media $:/bj/templates/media/IsPlay
 title: $:/bj/templates/media/isPlaySeparatelines
 type: text/vnd.tiddlywiki
 
+\whitespace trim
+
 <$linkcatcher message="tm-mply-move"><$link> <$macrocall $name=formatHMS num={{!!starttime}}/>
 </$link></$linkcatcher>
        <$reveal state=<<currentlyPlaying>> text={{!!title}} type="nomatch"><span class="tc-taglistplain"><$view field="summary"><$view field="caption"><$view field="title"/></$view></$view></span></$reveal>

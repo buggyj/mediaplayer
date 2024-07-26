@@ -2,7 +2,7 @@
 	"title": "$:/plugins/bj/mediaannotations",
 	"description": "media player templates",
 	"author": "JeffreyWilkinson",
-	"version": "2.0.5",
+	"version": "2.0.7",
 	"name":"bj's media annotation templates",
 	"list": "license readme",
 	"core-version": ">=5.2.0",

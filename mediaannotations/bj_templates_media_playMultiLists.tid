@@ -4,7 +4,7 @@ title: $:/bj/templates/media/playMultiLists
 type: text/vnd.tiddlywiki
 
 <details><summary>newname</summary><$edit-text tiddler="$:/temp/bj/caption" default="" tag=input/>
-<$button>➕<$vars playing={{{[<currentPlayList>get[text]else[]]}}}><$action-createtiddler $basetitle=<<currentTiddler>> tags=<<currentTiddler>> location={{!!location}} endaction="tm-mply-next"  text="{{||$:/bj/templates/media/gettemplate}}" caption={{$:/temp/bj/caption}}></$action-createtiddler></$vars><$action-deletetiddler $tiddler="$:/temp/bj/caption"/></$button></details>
+<$button>➕<$vars playing={{{[<currentPlayList>get[text]else[]]}}}><$action-createtiddler $basetitle=<<currentTiddler>> tags=<<currentTiddler>> location={{!!location}} endaction="tm-mply-next"   caption={{$:/temp/bj/caption}}></$action-createtiddler></$vars><$action-deletetiddler $tiddler="$:/temp/bj/caption"/></$button></details>
 
 !!Control list of Playlists using drag and drop
 <$vars currentPlayList=<<qualify "$:/temp/">> currentTag=<<currentTiddler>>>

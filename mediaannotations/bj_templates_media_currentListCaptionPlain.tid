@@ -1,0 +1,10 @@
+tags: $:/bj/templates/media
+title: $:/bj/templates/media/currentListCaptionPlain
+type: text/vnd.tiddlywiki
+
+<$reveal state=<<currentPlayList>> text={{!!title}} type="nomatch">
+<$link><span class="tc-taglistplain"><$transclude field="caption"><$view field="title"/></$transclude></span></$link>
+</$reveal>
+<$reveal state=<<currentPlayList>> text={{!!title}} type="match">
+<$link><span class="tc-taglist"><$transclude field="caption"><$view field="title"/></$transclude></span></$link></$reveal>
+<br>

@@ -1,0 +1,164 @@
+/*\
+title: $:/bj/modules/widgets/textplayer.js
+type: application/javascript
+module-type: widget
+
+
+
+\*/
+(function(){
+
+/*jslint node: false, browser: true */
+/*global $tw: false */
+
+if($tw.browser && !$tw.node) {
+var Widget = require("$:/core/modules/widgets/widget.js").widget;
+const glan = lang => window.speechSynthesis.getVoices().find(voice => voice.lang.startsWith("es"));
+//console.log(window.speechSynthesis.getVoices());
+var SPlayerWidget = function(parseTreeNode,options) {
+	this.initialise(parseTreeNode,options);
+	this.addEventListeners([
+	{type: "tm-mstop", handler: "handleStopEvent"},
+	{type: "tm-mpause", handler: "handlePauseEvent"},
+	{type: "tm-mply", handler: "handlePlayEvent"}]);
+};
+
+/*
+Inherit from the base widget class
+*/
+SPlayerWidget.prototype = new Widget();
+
+/*
+Render this widget into the DOM
+*/
+SPlayerWidget.prototype.render = function(parent,nextSibling) {
+	var self = this;
+	this.currentplayer = false;
+	this.paused = false;
+	this.parentDomNode = parent;
+	this.computeAttributes();
+	this.execute();
+	this.pNode = this.document.createElement("div");
+
+	this.cNode = this.document.createElement("div");
+	this.pNode.appendChild(this.cNode);
+	// Insert element
+	parent.insertBefore(this.pNode,nextSibling);
+		this.renderChildren(this.cNode,null);
+	this.domNodes.push(this.pNode);
+	this.pNode.setAttribute("hidden","true");
+};
+
+SPlayerWidget.prototype.ourmedia = function(event) {
+		var tid;
+		if ((tid = this.wiki.getTiddler(event.tiddler)) 
+			&& (tid.fields.type === "text/plain")) {
+			return true;
+		}
+		return false;
+}
+SPlayerWidget.prototype.doAction = function(triggeringWidget,event) {
+	if (event.type == "preStart" && this.currentplayer && !this.ourmedia(event)) { 
+		this.domNodes[0].setAttribute("hidden","true");
+		this.currentplayer = false;
+		this.handleStopEvent();
+	}
+	if (event.type == "start" && this.ourmedia(event)) {
+		if (!this.currentplayer) {
+			this.currentplayer = true;
+			this.domNodes[0].removeAttribute("hidden");
+		}
+		this.handleStartEvent(event);
+	}
+
+	return true; // Action was invoked
+};
+/*
+Compute the internal state of the widget
+*/
+SPlayerWidget.prototype.execute = function() {
+	// Get our parameters
+    this.timeOut =this.getAttribute("timeOut",2000);//ms
+   	this.onStart = this.getAttribute("onStart");
+	this.onEnd = this.getAttribute("onEnd");
+	this.field = this.getAttribute("field","text");
+    // Construct the child widgets
+	this.makeChildWidgets();
+};
+SPlayerWidget.prototype.handleOnTimeOut = function(event) {
+		// Check for an empty list
+	this.timerId = null;
+	return false; // dont propegate
+}
+/*
+Selectively refreshes the widget if needed. Returns true if the widget or any of its children needed re-rendering
+*/
+SPlayerWidget.prototype.refresh = function(changedTiddlers) {
+	var changedAttributes = this.computeAttributes();
+	if(changedAttributes["timeOut"] ) {
+		this.refreshSelf();
+		return true;
+	}
+	else {
+		return this.refreshChildren(changedTiddlers);
+	}
+};
+
+
+SPlayerWidget.prototype.handleStartEvent = function(event) {console.log ("start")
+	var player = this.audiodomNode;
+	var self = this,additionalFields,track,tid;
+var summary="error no found";
+    var duration = this.timeOut
+	{
+		additionalFields = event;
+		if ((tid = this.wiki.getTiddler(additionalFields.tiddler))) {
+			summary= tid.fields[this.field];
+		}	
+	}
+	speechSynthesis.cancel();
+	
+	let words = new SpeechSynthesisUtterance(summary);
+
+words.voice=glan();
+//console.log(window.speechSynthesis.getVoices());
+speechSynthesis.speak(words);
+var hndler=(event) => {
+	event.target.removeEventListener(event.type, hndler);
+  console.log(
+    `Utterance has finished being spoken after ${event.elapsedTime} seconds.`,
+  );self.dispatchEvent({
+					type: self.onEnd
+					});	
+}
+words.addEventListener("end", hndler);
+
+			if (this.onStart){
+			this.dispatchEvent({
+			type: this.onStart
+			});	
+		}
+this.paused = false;
+	return false;//always consume event
+};
+SPlayerWidget.prototype.handleStopEvent = function(event) {console.log ("cancel")
+ speechSynthesis.cancel(); this.paused = false;
+};
+SPlayerWidget.prototype.handlePauseEvent = function(event) {console.log ("pause")
+speechSynthesis.pause();
+this.paused=true;
+};
+
+SPlayerWidget.prototype.handlePlayEvent = function(event) {console.log ("play",this.paused)
+	try {	
+	if (this.paused) {
+		this.debug ("resume start play ");
+		speechSynthesis.resume();
+		this.paused = false;
+	}
+    } catch(e) {this.debug ("mplayer start fail");};
+	return false;//always consume event
+};
+exports.textplayer = SPlayerWidget;
+}
+})();

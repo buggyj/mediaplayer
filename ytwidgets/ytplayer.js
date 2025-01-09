@@ -83,14 +83,14 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 							  function updateTime() {
 								try {self.setVariable("playertime",(self.player.getCurrentTime()).toString());} catch(e) {}
 								if (self.player.getCurrentTime()>self.end){
-										debug (self.end+" api time pause "+event.target.getCurrentTime());
+										debug (self.end+" api time pause_1 "+event.target.getCurrentTime());
 										self.timer=false;
-										 if (self.onEnd){debug ("yt send stop");
+										 if (self.onEnd){debug ("yt send stop_1");
 											self.dispatchEvent({
 											type: self.onEnd
 											});	
 										}  else {
-											debug ("yt do pause");
+											debug ("yt do pause_1");
 											self.player.pauseVideo();
 										}
 									 }
@@ -109,6 +109,7 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 					} else debug (self.end+" api time normal "+event.target.getCurrentTime())
 					//self.started=false;
 					if (self.onEnd){debug ("yt send stop");
+						self.timer=false;
 						self.dispatchEvent({
 						type: self.onEnd
 						});	
@@ -120,6 +121,7 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 			'onError':function (event) {
 			  debug ("yterror"+event.data);
 			  if (self.onEnd){debug ("yt on error send stop");
+						self.timer=false;
 						self.dispatchEvent({
 						type: self.onEnd
 						});	
@@ -262,7 +264,7 @@ YTrawWidget.prototype.handleStartEvent = function(event) {
 					//if (self.end) parms.endSeconds  =parseInt(self.end);
 					if (self.src) parms.videoId  =self.src ;
 					player.loadVideoById(parms);
-				} else 	if (currenttime - self.start>0.6|currenttime - self.start<0){
+				} else 	if (currenttime - self.start>0.6|currenttime - self.start<-0.2){
 					debug ("yt start ready2");
 					var parms = {};
 					if (self.start) parms.startSeconds= parseInt(self.start);
@@ -271,6 +273,7 @@ YTrawWidget.prototype.handleStartEvent = function(event) {
 					//player.loadVideoById(parms);
 					//self.player.pauseVideo();
 					self.player.seekTo(0.01+parseInt(self.start));debug("seekto "+self.start);
+					if (self.player.getPlayerState()!=100)self.player.playVideo();
 					/*self.player.playVideo();
 					setTimeout(updateTime, 1000);
 							  function updateTime() {
@@ -288,11 +291,13 @@ YTrawWidget.prototype.handleStartEvent = function(event) {
 					debug("yt continue");
 					if (self.player.getPlayerState()!=100)self.player.playVideo();
 				}
-				if (!self.timer) 
+				if (!self.timer) {
+				self.timer=true
 				setTimeout(
 					function updateTime() {
 						var delta = self.end-self.player.getCurrentTime();
-						if (delta < 0 && (delta > -1)){
+						
+						if (delta < 0.1 && (delta > -1)){
 								debug (self.end+" api time pause3 "+self.player.getCurrentTime());
 								 //self.player.pauseVideo();
 								 self.timer=false;
@@ -305,8 +310,8 @@ YTrawWidget.prototype.handleStartEvent = function(event) {
 									self.player.pauseVideo();
 								}
 							 }
-					  else setTimeout(updateTime, 300);
-					}, 300);
+					  else if (self.timer) {setTimeout(updateTime, 300);debug(self.end+"yt setudatetimer"+self.player.getCurrentTime())};
+					}, 300)};
 				}
 		} else debug ("yt start not ready");
 		if (self.onStart){
@@ -333,12 +338,14 @@ YTrawWidget.prototype.handleStopEvent = function(event) {
 	var player = this.player;
 	try {
 	player.stopVideo();
+	this.timer=false
 	debug("stopped at"+this.player.getCurrentTime().toString())
     } catch(e) {};
 	return false;//always consume event
 };
 YTrawWidget.prototype.handlePlayEvent = function(event) {
 	var player = this.player;
+	debug("yt play event")
 	try {	
 	 {
 		player.playVideo();
@@ -350,6 +357,7 @@ YTrawWidget.prototype.handlePauseEvent = function(event) {
 	var player = this.player;
 	try {
 	player.pauseVideo();
+	this.timer=false;
 	this.setVariable("playertime",this.player.getCurrentTime().toString());
 	debug("paused at"+this.player.getCurrentTime().toString())
     } catch(e) {};

@@ -49,7 +49,7 @@ SPlayerWidget.prototype.render = function(parent,nextSibling) {
 SPlayerWidget.prototype.ourmedia = function(event) {
 		var tid;
 		if ((tid = this.wiki.getTiddler(event.tiddler)) 
-			&& (tid.fields.type === "text/vnd.tiddlywiki")) {
+			&& (!tid.fields.type||tid.fields.type === "text/vnd.tiddlywiki"||tid.fields.type ==="")) {
 			return true;
 		}
 		return false;

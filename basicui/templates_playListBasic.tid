@@ -2,22 +2,19 @@ title: $:/bj/templates/playListBasic
 type: text/vnd.tiddlywiki
 
 <$vars currentlyPlaying=<<qualify "$:/temp/">>>
-<$msequence filter="[tag<currentTiddler>]" syntid=<<currentlyPlaying>>  mode="dynamic" onEnd="tm-ply-next" autoStart="yes">
-   <$ytplayer onEnd="tm-mply-next" onStart="tm-mply-caught"  deltas="5.0" >
-   </$ytplayer>
-   <$vplayer onEnd="tm-mply-next" onStart="tm-mply-caught"  deltas="5.0" >
-   </$vplayer>
-   <$mplayer onEnd="tm-mply-next" onStart="tm-mply-caught" mode="dynamic" deltas="5">
-   </$mplayer>
+<$msequence filter="[tag<currentTiddler>]" syntid=<<currentlyPlaying>>  mode="dynamic" onEnd="tm-ply-next" autoStart="yes" final="yes">
+   <$ytplayer onEnd="tm-mply-next" onStart="tm-mply-caught" />
+   <$vplayer onEnd="tm-mply-next" onStart="tm-mply-caught" />
+   <$mplayer onEnd="tm-mply-next" onStart="tm-mply-caught" mode="dynamic" />
    <$staticplayer onEnd="tm-mply-next" onStart="tm-mply-caught" >
       <$transclude tiddler={{{[<currentlyPlaying>get[text]]}}} mode="block"/>
    </$staticplayer>
+   <$textplayer onEnd="tm-mply-next" onStart="tm-mply-caught" />
 
 {{$:/bj/buttonup}}
 {{$:/bj/buttondown}}
 
    <$linkcatcher message="tm-mply-move">
-
 
    <$list filter="[tag<currentTiddler>]" template ="$:/bj/templates/isPlayingBasic" 
        emptyMessage="Tag a tiddler with playlist tiddler to add to playlist">

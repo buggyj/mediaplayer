@@ -183,7 +183,7 @@ if (event.type == "start" && this.ourmedia(event)) {
 		this.handleStartEvent(event);
 
 	}
-	if (event.type == "final") this.handleStopEvent(event);
+	if (event.type == "final") this.handlePauseEvent(event);
 	return ; // Action was invoked
 };
 /*

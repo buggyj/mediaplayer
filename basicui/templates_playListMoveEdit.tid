@@ -1,0 +1,45 @@
+title: $:/bj/templates/playListMoveEdit
+type: text/vnd.tiddlywiki
+
+<$vars currentlyPlaying=<<qualify "$:/temp/">>>
+<$msequence filter="[tag<currentTiddler>]" syntid=<<currentlyPlaying>>  mode="dynamic" onEnd="tm-ply-next" autoStart="yes" final="yes">
+    <$ytplayer onEnd="tm-mply-next" onStart="tm-mply-caught" />
+    <$vplayer onEnd="tm-mply-next" onStart="tm-mply-caught"  />
+    <$mplayer onEnd="tm-mply-next" onStart="tm-mply-caught" />
+    <$staticplayer onEnd="tm-mply-next" onStart="tm-mply-caught" >
+        <$transclude tiddler={{{[<currentlyPlaying>get[text]]}}} mode="block"/>
+    </$staticplayer>
+    <$textplayer onEnd="tm-mply-next" onStart="tm-mply-caught" />
+    
+     <!------------  buttons to select edit/play list------------->
+    <$reveal type="nomatch" state="$:/temp/editplaylist" text="edit">
+        <$button set="$:/temp/editplaylist" setTo="edit">🖊️</$button>
+    </$reveal>
+    <$reveal type="match" state="$:/temp/editplaylist" text="edit">
+        <$button set="$:/temp/editplaylist" setTo="">[x]</$button>
+    </$reveal>
+    
+    {{$:/bj/buttonup}}
+    {{$:/bj/buttondown}}
+    
+    <!-----------------  edit/play list--------------------->
+    <$let itemTemplate ={{{[[$:/temp/editplaylist]text[edit]then[bj/editalist]else[$:/bj/templates/isPlayingBasic]]}}}>
+        <$linkcatcher message="tm-mply-move">
+        <$vars currentTag=<<currentTiddler>>>
+        <$macrocall $name="list-tagged-draggable" tag=<<currentTiddler>> itemTemplate=<<itemTemplate>> emptyMessage="To add to playlist drop here"/>
+        </$vars>
+        </$linkcatcher>
+    </$let>
+</$msequence>
+
+
+
+
+
+
+
+
+
+
+
+

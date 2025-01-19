@@ -2,9 +2,9 @@
 	"title": "$:/plugins/bj/ytmediaplayer",
 	"description": "media player",
 	"author": "JeffreyWilkinson",
-	"version": "0.0.7",
+	"version": "5.3.0",
 	"list": "license readme",
-	"core-version": ">=5.2.0",
+	"core-version": ">=5.3.0",
 	"source": "https://github.com/buggyj/mediaplayer",
 	"plugin-type": "plugin"
 }

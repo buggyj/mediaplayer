@@ -9,7 +9,7 @@ type: text/vnd.tiddlywiki
    <$staticplayer onEnd="tm-mply-next" onStart="tm-mply-caught" >
       <$transclude tiddler={{{[<currentlyPlaying>get[text]]}}} mode="block"/>
    </$staticplayer>
-   <$textplayer onEnd="tm-mply-next" onStart="tm-mply-caught" />
+   <$talkplayer onEnd="tm-mply-next" onStart="tm-mply-caught" />
 
 {{$:/bj/buttonup}}
 {{$:/bj/buttondown}}

@@ -1,0 +1,74 @@
+!!Reference
+
+Below is a description of the MediaPlayer widgets. Player widgets are placed as children of the mseq widget. Buttons are placed as children of the player widgets, and when pressed send messages, eg <$action-sendmessage $message="tm-mgoto" time="20"/> (move to 20seconds from begining), thus controlling the players. See plugin contents for some buttons.
+
+!!sequencer
+The mseq widget control the order of the sequence and calls upon the player widgets to play each tid in the sequence. 
+
+
+!!!mseq responds to these messages
+
+| message | action |h
+|tm-mply-restart|go to start of list|
+|tm-mply-stick|on end go to start|
+|tm-mply-unstick|on end execute onend message and stop|
+|tm-mply-next|move to next item, if end of list then if sticky go to start else execute onend message and stop|
+|tm-mply-forcenext|move to next list item. If end of list execute onend message and stop|
+|tm-mply-prev|move to previous item, has no effect if at the begining of list|
+|tm-mply-move|stop current player and move to item (via a link) that was clicked|
+|tm-mply-caught|player positive response to msequence solicitation 'can you play this tiddler'|
+
+
+The msequence widget sequences a list of media tracks by actioning the media player widgets, and responding to their status messages. The list is either given as a named tag or as a filter, -
+`<$msequence targetTag={{$:/temp/list}}>` or` <$msequence filter="....>` where filter is any filter expression.
+
+The msequence widget also broadcasts which tiddler is currently playing by writing to a  'sync' tiddler, defined as a parameter of the widget, eg `<$msequence syntid="aTiddler">`
+
+The media players, when used with the msequence widget, return status and next messages i.e. `<$ytplayer onEnd="tm-mply-next" onStart="tm-mply-caught">`
+
+!!Players
+
+Media players:  audio/mp3 (mplayer widget), video/mp4 (vplayer widget), video/x-youtube (ytplayer widget), staticplayer for tiddlytext tids, talkplayer for text to voice. 
+
+Audio and Video players respond to these messages:
+
+| message | action |h
+|tm-mff|jump foward|
+|tm-mrw|jump back|
+|tm-mstop|stop|
+|tm-mpause|pause|
+|tm-mvup|increase volume|
+|tm-mvdwn|decrease volume|
+|tm-mply|play|
+|tm-mply|jump to time given as a parameter|
+
+
+the mplayer and vplayer also have 
+
+| message | action |h
+|tm-msdwn|speed up|
+|tm-mskup|slow down|
+
+
+!!!Example usage see $:/bj/templates/playListBasic
+
+!!Multiple paylists
+
+It is possible to have a playlist of playlists using the playlist widget. The playlist widget accepts a filter as a parameter (default is `[tag<currentTiddler>]`). 
+The tiddler at the current list position is indicated by the contents of a 'sync' tiddler, defined as a parameter of the widget, `<$playlist ..... syntid="
+SomeTiddler">`
+
+Usually a tag will be used to form the playlist. 
+
+The playlist widget responds to these messages:
+
+| message | action |h
+|tm-ply-next|move to next playlist|
+|tm-ply-move|move to playlist that was clicked(via a link)|
+|tm-ply-prev|move to previous playlist|
+
+Typically the msequence widget will have an onEnd message to signal to the playlist widget to move on to the next playlist - `<$msequence ..... onEnd="tm-ply-next">`
+
+
+!!!Example usage see $:/bj/templates/playMultListsBasic and $:/bj/templates/playListBasic, also $:/bj/templates/playListMoveEdit
+

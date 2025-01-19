@@ -9,7 +9,7 @@ type: text/vnd.tiddlywiki
     <$staticplayer onEnd="tm-mply-next" onStart="tm-mply-caught" >
         <$transclude tiddler={{{[<currentlyPlaying>get[text]]}}} mode="block"/>
     </$staticplayer>
-    <$textplayer onEnd="tm-mply-next" onStart="tm-mply-caught" />
+    <$talkplayer onEnd="tm-mply-next" onStart="tm-mply-caught" />
     
      <!------------  buttons to select edit/play list------------->
     <$reveal type="nomatch" state="$:/temp/editplaylist" text="edit">
@@ -23,7 +23,7 @@ type: text/vnd.tiddlywiki
     {{$:/bj/buttondown}}
     
     <!-----------------  edit/play list--------------------->
-    <$let itemTemplate ={{{[[$:/temp/editplaylist]text[edit]then[bj/editalist]else[$:/bj/templates/isPlayingBasic]]}}}>
+    <$let itemTemplate ={{{[[$:/temp/editplaylist]text[edit]then[$:/bj/template/iseditLabel]else[$:/bj/templates/isPlayingBasic]]}}}>
         <$linkcatcher message="tm-mply-move">
         <$vars currentTag=<<currentTiddler>>>
         <$macrocall $name="list-tagged-draggable" tag=<<currentTiddler>> itemTemplate=<<itemTemplate>> emptyMessage="To add to playlist drop here"/>

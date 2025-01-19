@@ -1,0 +1,7 @@
+title: $:/bj/template/iseditLabel
+type: text/vnd.tiddlywiki
+
+<$fieldmangler><$button  param= <<currentTag>> message="tm-remove-tag" class="tc-btn-invisible">{{$:/core/images/cancel-button}}</$button></$fieldmangler>
+<$bj-toggle name="edit" primeValue="$:/bj/anonplaying" altValue="$:/bj/anonedit">
+<$transclude tiddler=<<edit>>/>
+</$bj-toggle>

@@ -11,6 +11,12 @@
 		"fields": {
 			"title": "$:/plugins/bj/mediaplayer/readme"
 		}
+	},
+	{
+		"file": "reference.tid",
+		"fields": {
+			"title": "$:/plugins/bj/mediaplayer/reference"
+		}
 	}],
 	 "directories": [
 		"widgets","basicui"

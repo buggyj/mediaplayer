@@ -16,6 +16,7 @@ var mseq = function () {};
 var vplayer = function () {};
 var mplayer = function () {};
 var ytplayer = function () {};
+var tplayer = function () {};
 
 exports.bjmseqlog = function () {
 	return function () {mseq.apply(console,arguments); }
@@ -28,6 +29,10 @@ exports.bjmplayerlog = function () {
 }
 exports.bjytplayerlog = function () {
 	return function () {ytplayer.apply(console,arguments); }
+}
+
+exports.bjtplayerlog = function () {
+	return function () {tplayer.apply(console,arguments); }
 }
 
 if ($tw.browser){
@@ -50,6 +55,11 @@ if ($tw.browser){
 	$bjlogs.setytplayer = function (on) { 
 			if (on === 0) ytplayer = function () {};
 			else ytplayer = console.log;
+			return on;
+	}
+	$bjlogs.settplayer = function (on) { 
+			if (on === 0) tplayer = function () {};
+			else tplayer = console.log;
 			return on;
 	}
 }

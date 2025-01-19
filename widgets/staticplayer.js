@@ -117,18 +117,18 @@ SPlayerWidget.prototype.handleStartEvent = function(event) {
 		}
 		this.timerId = setTimeout(	function (){	// Check for an empty list
 			self.timerId = null;
-					if (self.onEnd && !!self.domNodes[0] && self.domNodes[0].isConnected){//check that player still playing
-					self.dispatchEvent({
+			if (self.onEnd && !!self.domNodes[0] && self.domNodes[0].isConnected){//check that player still playing
+				self.dispatchEvent({
 					type: self.onEnd
-					});	
-				}
+				});	
+			}
 			return false; // dont propegate
 		},duration);
 		
-		if (this.onStart){
-			this.dispatchEvent({
-			type: this.onStart
-		});	
+	if (this.onStart){
+		this.dispatchEvent({
+		type: this.onStart
+	});	
 	}
 	} catch(e) {};
 	

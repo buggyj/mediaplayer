@@ -59,7 +59,8 @@ YTrawWidget.prototype.render = function(parent,nextSibling) {
 	this.domNodes.push(this.pNode);
 
 	 
-    this.cNode.setAttribute("class","cno1");	
+    this.cNode.setAttribute("class","cno1");
+    this.cNode.setAttribute("hidden","true");	
     this.pNode.setAttribute("class","pno1");
 	this.player = new YT.Player('player'+newid, {
 		height: 1,//this.height,

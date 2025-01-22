@@ -1,15 +1,14 @@
-title: $:/bj/templates/playListMoveEdit
+title: $:/bj/templates/playListMoveEditTalk
 type: text/vnd.tiddlywiki
 
 <$vars currentlyPlaying=<<qualify "$:/temp/">>>
 <$msequence filter="[tag<currentTiddler>]" syntid=<<currentlyPlaying>>  mode="dynamic" onEnd="tm-ply-next" autoStart="yes" final="yes">
-    <$ytplayer onEnd="tm-mply-next" onStart="tm-mply-caught" ><<controls>></$ytplayer>
-    <$vplayer onEnd="tm-mply-next" onStart="tm-mply-caught"  ><<controls>></$vplayer>
-    <$mplayer onEnd="tm-mply-next" onStart="tm-mply-caught" ><<controls>></$mplayer>
-    <$staticplayer onEnd="tm-mply-next" onStart="tm-mply-caught" >
-        <$transclude tiddler={{{[<currentlyPlaying>get[text]]}}} mode="block"/>
-    </$staticplayer>
-    <$talkplayer onEnd="tm-mply-next" onStart="tm-mply-caught" ></$talkplayer>
+    <$ytplayer onEnd="tm-mply-next" onStart="tm-mply-caught" ><<tcontrols>></$ytplayer>
+    <$vplayer onEnd="tm-mply-next" onStart="tm-mply-caught"  ><<tcontrols>></$vplayer>
+    <$mplayer onEnd="tm-mply-next" onStart="tm-mply-caught" ><<tcontrols>></$mplayer>
+    <$talkplayer onEnd="tm-mply-next" onStart="tm-mply-caught" type="text/vnd.tiddlywiki" macro="tiddlertexttotext" field=text >
+            <$transclude tiddler={{{[<currentlyPlaying>get[text]]}}} mode="block"/><<tcontrols>>
+    </$talkplayer>
     
      <!------------  buttons to select edit/play list------------->
     <$reveal type="nomatch" state="$:/temp/editplaylist" text="edit">
@@ -23,7 +22,7 @@ type: text/vnd.tiddlywiki
     {{$:/bj/buttondown}}
     
     <!-----------------  edit/play list--------------------->
-    <$let itemTemplate ={{{[[$:/temp/editplaylist]text[edit]then[$:/bj/template/iseditLabel]else[$:/bj/templates/isPlayingBasic]]}}}>
+    <$let itemTemplate ={{{[[$:/temp/editplaylist]text[edit]then[$:/bj/editalist]else[$:/bj/templates/isPlayingBasic]]}}}>
         <$linkcatcher message="tm-mply-move">
         <$vars currentTag=<<currentTiddler>>>
         <$macrocall $name="list-tagged-draggable" tag=<<currentTiddler>> itemTemplate=<<itemTemplate>> emptyMessage="To add to playlist drop here"/>
@@ -31,6 +30,22 @@ type: text/vnd.tiddlywiki
         </$linkcatcher>
     </$let>
 </$msequence>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
